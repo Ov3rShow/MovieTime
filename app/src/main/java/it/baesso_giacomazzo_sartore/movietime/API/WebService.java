@@ -31,14 +31,14 @@ public class WebService {
     }
 
     public void getAllFavourites(final IwebService serviceListener){
-        todoService.listFavourites().enqueue(new Callback<List<DbStrings>>() {
+        todoService.listFavourites().enqueue(new Callback<List<Movie>>() {
             @Override
-            public void onResponse(Call<List<DbStrings>> call, Response<List<DbStrings>> response) {
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
                 Log.e("Test","Server response");
             }
 
             @Override
-            public void onFailure(Call<List<DbStrings>> call, Throwable t) {
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
                 Log.e("Test","Server failure");
             }
         });

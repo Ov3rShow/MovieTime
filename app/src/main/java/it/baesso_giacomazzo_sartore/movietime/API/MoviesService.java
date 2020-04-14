@@ -8,5 +8,5 @@ import retrofit2.http.GET;
 
 public interface MoviesService {
     @GET("FILMS")
-    Call<List<DbStrings>> listFavourites();
+    Call<List<Movie>> listFavourites();
 }
