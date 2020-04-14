@@ -1,5 +1,6 @@
 package it.baesso_giacomazzo_sartore.movietime.API;
 
+import android.graphics.Movie;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 import retrofit2.Call;
 import retrofit2.Callback;
