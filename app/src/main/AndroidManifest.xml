@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.baesso_giacomazzo_sartore.movietime">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.DetailActivity"></activity>
         <activity android:name=".ui.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +22,8 @@
         </activity>
 
         <provider
-            android:name="it.baesso_giacomazzo_sartore.movietime.database.DbProvider"
+            android:name=".database.DbProvider"
             android:authorities="it.baesso_giacomazzo_sartore.movietime.database.DbProvider" />
-
     </application>
 
 </manifest>
