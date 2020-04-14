@@ -5,7 +5,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
@@ -24,30 +28,33 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-
-
-
-        WebService webService = WebService.getInstance();
-        webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", 1);
-
-
-
-
+        if(isNetworkAvailable())
+        {
+            WebService webService = WebService.getInstance();
+            webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", 1);
+        }
+        else
+        {
+            //TODO implementare lettura db
+        }
 
         recyclerView = findViewById(R.id.listActivity_recyclerView);
         mLayoutManager = new GridLayoutManager(ListActivity.this, 2);
-
-        String[] strings = new String[] {"tavolo", "albero", "zaino", "cane", "cocorita"};
-
         recyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new RecyclerViewFilmsAdapter(strings);
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showApiCallResult(PopularResult result) {
-        Toast.makeText(ListActivity.this, String.valueOf(result.getResults().size()), Toast.LENGTH_SHORT).show();
+        mAdapter = new RecyclerViewFilmsAdapter(result.getResults(), ListActivity.this);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager == null)
+            return false;
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MovieTime</string>
     <string name="api_key">c96020adb6666d781b4e1ebdaaa13a94</string>
+    <string name="images_base_path">https://image.tmdb.org/t/p/w500</string>
 </resources>

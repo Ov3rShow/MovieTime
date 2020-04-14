@@ -1,5 +1,6 @@
 package it.baesso_giacomazzo_sartore.movietime.API;
 
+import android.content.Context;
 import android.graphics.Movie;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.internal.EverythingIsNonNull;
 
 public class WebService {
     private static WebService instance;
@@ -34,7 +36,7 @@ public class WebService {
         return instance;
     }
 
-    public void getAllPopular(final ListActivityInterface listActivityInterface, String key, String localization, int page){
+    public void getAllPopular(final Context context, String key, String localization, int page){
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("api_key", key);
@@ -43,13 +45,18 @@ public class WebService {
 
         todoService.listPopular(parameters).enqueue(new Callback<PopularResult>() {
             @Override
+            @EverythingIsNonNull
             public void onResponse(Call<PopularResult> call, Response<PopularResult> response) {
-                listActivityInterface.showApiCallResult(response.body());
 
-                //TODO avviare salvataggio su db se è passato il tempo limite
+                if(context instanceof ListActivityInterface)
+                    ((ListActivityInterface)context).showApiCallResult(response.body());
+
+                /*if(response.body() != null && response.body().getResults() != null)
+                    DbSaver.DbSaving(context, response.body().getResults());*/
             }
 
             @Override
+            @EverythingIsNonNull
             public void onFailure(Call<PopularResult> call, Throwable t) {
                 Log.e("Filtro ",t.getMessage());
             }
