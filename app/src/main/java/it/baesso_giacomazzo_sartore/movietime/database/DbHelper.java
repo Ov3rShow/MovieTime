@@ -8,7 +8,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static DbHelper helper;
 
-    private static final String DB_NAME = "film.db";
+    private static final String DB_NAME = "movie.db";
     private static final int VERSION = 1;
 
     private DbHelper(Context context) {

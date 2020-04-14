@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="it.baesso_giacomazzo_sartore.movietime.database.DbProvider"
+            android:authorities="it.baesso_giacomazzo_sartore.movietime.database.DbProvider" />
+
     </application>
 
 </manifest>
