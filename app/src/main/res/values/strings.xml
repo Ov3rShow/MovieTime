@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MovieTime</string>
+    <string name="api_key">c96020adb6666d781b4e1ebdaaa13a94</string>
 </resources>

@@ -2,9 +2,13 @@ package it.baesso_giacomazzo_sartore.movietime.API;
 
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
+import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,7 +21,7 @@ public class WebService {
 
     private WebService(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://themoviedb.org")
+                .baseUrl("https://api.themoviedb.org")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -30,16 +34,24 @@ public class WebService {
         return instance;
     }
 
-    public void getAllFavourites(final IwebService serviceListener){
-        todoService.listFavourites().enqueue(new Callback<List<Movie>>() {
+    public void getAllPopular(final ListActivityInterface listActivityInterface, String key, String localization, int page){
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("api_key", key);
+        parameters.put("language", localization);
+        parameters.put("page", String.valueOf(page));
+
+        todoService.listPopular(parameters).enqueue(new Callback<PopularResult>() {
             @Override
-            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
-                Log.e("Test","Server response");
+            public void onResponse(Call<PopularResult> call, Response<PopularResult> response) {
+                listActivityInterface.showApiCallResult(response.body());
+
+                //TODO avviare salvataggio su db se è passato il tempo limite
             }
 
             @Override
-            public void onFailure(Call<List<Movie>> call, Throwable t) {
-                Log.e("Test","Server failure");
+            public void onFailure(Call<PopularResult> call, Throwable t) {
+                Log.e("Filtro ",t.getMessage());
             }
         });
     }
