@@ -28,14 +28,7 @@ class DbSaver {
             cv.put(DbStrings.VOTE_AVERAGE, movie.getVote_average());
             cv.put(DbStrings.ADULT, movie.isAdult()? 1 : 0);
 
-            if(context.getContentResolver().insert(DbProvider.MOVIES_URI, cv) != null)
-            {
-                Log.e("Inserito ", movie.getOriginal_title());
-            }
-            else
-            {
-                Log.e("Errore ", movie.getOriginal_title());
-            }
+            context.getContentResolver().insert(DbProvider.MOVIES_URI, cv);
         }
     }
 }

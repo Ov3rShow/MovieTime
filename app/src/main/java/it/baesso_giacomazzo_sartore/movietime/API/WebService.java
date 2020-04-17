@@ -51,8 +51,8 @@ public class WebService {
                 if(context instanceof ListActivityInterface)
                     ((ListActivityInterface)context).showApiCallResult(response.body());
 
-                /*if(response.body() != null && response.body().getResults() != null)
-                    DbSaver.DbSaving(context, response.body().getResults());*/
+                if(response.body() != null && response.body().getResults() != null)
+                    DbSaver.DbSaving(context, response.body().getResults());
             }
 
             @Override
