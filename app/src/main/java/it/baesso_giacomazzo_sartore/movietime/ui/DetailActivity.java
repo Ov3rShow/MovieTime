@@ -11,14 +11,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.skydoves.transformationlayout.TransformationAppCompatActivity;
 
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 
-public class DetailActivity extends TransformationAppCompatActivity {
+public class DetailActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView titleTxtView, overviewTxtView;

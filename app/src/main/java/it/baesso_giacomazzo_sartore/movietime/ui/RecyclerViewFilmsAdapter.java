@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.skydoves.transformationlayout.TransformationCompat;
-import com.skydoves.transformationlayout.TransformationLayout;
 
 import java.util.List;
 
@@ -46,10 +44,9 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        ImageView imageView = holder.cellView.findViewById(R.id.cell_imageView);
-        TextView textView = holder.cellView.findViewById(R.id.cell_textView);
-        CardView cardView = holder.cellView.findViewById(R.id.cell_cardView);
-        final TransformationLayout transformationLayout = holder.cellView.findViewById(R.id.cell_transformationLayout);
+        final ImageView imageView = holder.cellView.findViewById(R.id.cell_imageView);
+        final TextView textView = holder.cellView.findViewById(R.id.cell_textView);
+        final CardView cardView = holder.cellView.findViewById(R.id.cell_cardView);
 
         Glide.with(context)
                 .load("https://image.tmdb.org/t/p/w500".concat(movies.get(position).getPoster_path()))
@@ -72,7 +69,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
                 bundle.putDouble(DbStrings.VOTE_AVERAGE, movies.get(position).getVote_average());
                 bundle.putBoolean(DbStrings.ADULT, movies.get(position).isAdult());
                 intent.putExtras(bundle);
-                TransformationCompat.INSTANCE.startActivity(transformationLayout, intent);
+                context.startActivity(intent);
             }
         });
     }

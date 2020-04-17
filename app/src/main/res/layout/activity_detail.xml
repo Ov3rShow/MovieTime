@@ -33,7 +33,7 @@
                 android:layout_marginVertical="8dp"
                 android:text="Titolo"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textSize="22sp" />
+                android:textSize="22sp"/>
 
             <RatingBar
                 android:id="@+id/detail_rating"

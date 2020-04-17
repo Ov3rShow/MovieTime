@@ -1,5 +1,6 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,12 +16,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.skydoves.transformationlayout.TransitionExtensionKt;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -34,8 +35,6 @@ import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 
-import static com.skydoves.transformationlayout.TransitionExtensionKt.onTransformationStartContainer;
-
 public class ListActivity extends AppCompatActivity implements ListActivityInterface {
 
     RecyclerView recyclerView;
@@ -48,7 +47,6 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TransitionExtensionKt.onTransformationStartContainer(ListActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
@@ -142,5 +140,21 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.movie_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.toolbar_parentalControl:
+            {
+                ParentalControlDialog dialog = new ParentalControlDialog();
+                dialog.show(getSupportFragmentManager(), "TAG_AGGIUNTA");
+                break;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
