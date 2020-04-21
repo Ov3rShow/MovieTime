@@ -33,12 +33,27 @@
             android:layout_marginBottom="4dp"/>
 
         <EditText
-            android:id="@+id/parent_psw"
+            android:id="@+id/DialogRemove_psw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="4dp"
             android:hint="Password"
-            android:layout_marginHorizontal="16dp"/>
+            android:layout_marginHorizontal="16dp"
+            android:inputType="textPassword"/>
+
+        <TextView
+            android:id="@+id/DialogRemove_incorrect_psw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:paddingHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone"
+            android:drawableStart="@drawable/ic_warning_black_24dp"
+            android:drawableTint="@color/red"
+            android:drawablePadding="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:text="Rmiovi"
+                android:text="Rimuovi"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:background="?attr/selectableItemBackground"

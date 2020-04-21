@@ -2,33 +2,33 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentProvider;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
 import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
@@ -38,12 +38,16 @@ import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 public class ListActivity extends AppCompatActivity implements ListActivityInterface {
 
     RecyclerView recyclerView;
-    RecyclerView.Adapter mAdapter;
+    RecyclerViewFilmsAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     List<Movie> cachedMovies;
 
     int spanCount;
+    int nextPageToDownload = 1;
+
+    ProgressBar progressBar;
+    Chip goToTop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +60,39 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         mLayoutManager = new GridLayoutManager(ListActivity.this, spanCount);
         recyclerView.setLayoutManager(mLayoutManager);
 
+        progressBar = findViewById(R.id.listActivity_progressBar);
+        goToTop = findViewById(R.id.listActivity_chip);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    refreshList();
+                }
+            }
+        });
+
+        goToTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.smoothScrollToPosition(0);
+                goToTop.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        updateMoviesList();
+    }
+
+    void updateMoviesList()
+    {
         if(isNetworkAvailable())
         {
             WebService webService = WebService.getInstance();
-            webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", 1);
+            webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload);
+            nextPageToDownload++;
         }
         else
         {
@@ -91,17 +124,50 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             showList(cachedMovies);
         }
 
+        progressBar.setVisibility(View.INVISIBLE);
         showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent);
     }
 
     @Override
     public void showApiCallResult(PopularResult result) {
-        showList(result.getResults());
+        if(mAdapter != null && mAdapter.getMovies() != null)
+        {
+            mAdapter.getMovies().addAll(result.getResults());
+            mAdapter.notifyDataSetChanged();
+            goToTop.setVisibility(View.VISIBLE);
+        }
+        else
+            showList(result.getResults());
+
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showSnackBar(String text, int icon, int backgroundColor) {
+        showCustomSnackbar(text, icon, backgroundColor);
+    }
+
+    @Override
+    public void refreshList() {
+        updateMoviesList();
     }
 
     void showList(List<Movie> list)
     {
-        mAdapter = new RecyclerViewFilmsAdapter(list, ListActivity.this);
+        List<Movie> filteredList = new ArrayList<>();
+
+        if(PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false))
+        {
+            for (Movie movie : list)
+            {
+                if(!movie.isAdult())
+                    filteredList.add(movie);
+            }
+        }
+        else
+            filteredList.addAll(list);
+
+        mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this);
         recyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
@@ -149,8 +215,19 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         {
             case R.id.toolbar_parentalControl:
             {
-                ParentalControlDialog dialog = new ParentalControlDialog();
+                DialogFragment dialog;
+
+                if(PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false))
+                {
+                    dialog = new RemoveParentalControlDialog();
+                }
+                else
+                {
+                    dialog = new ParentalControlDialog();
+                }
+
                 dialog.show(getSupportFragmentManager(), "TAG_AGGIUNTA");
+
                 break;
             }
         }

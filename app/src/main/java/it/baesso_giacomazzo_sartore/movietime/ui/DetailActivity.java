@@ -3,8 +3,10 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -48,21 +50,37 @@ public class DetailActivity extends AppCompatActivity {
             String overview = getIntent().getExtras().getString(DbStrings.OVERVIEW);
             double rating = getIntent().getExtras().getDouble(DbStrings.VOTE_AVERAGE);
 
-            if(image == null)
+            int orientation = getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            {
                 image = getIntent().getExtras().getString(DbStrings.POSTER_PATH);
+            }
+            else
+            {
+                if(image == null)
+                    image = getIntent().getExtras().getString(DbStrings.POSTER_PATH);
+            }
 
-            if(image != null)
-                Glide.with(DetailActivity.this)
-                        .load("https://image.tmdb.org/t/p/w500".concat(image))
-                        .apply(new RequestOptions().centerCrop())
-                        .placeholder(getDrawable(R.drawable.placeholder))
-                        .error(getDrawable(R.drawable.error))
-                        .into(imageView);
-
+            Glide.with(DetailActivity.this)
+                    .load("https://image.tmdb.org/t/p/w500".concat(image))
+                    .apply(new RequestOptions().centerCrop())
+                    .placeholder(getDrawable(R.drawable.placeholder))
+                    .error(getDrawable(R.drawable.error))
+                    .into(imageView);
 
             titleTxtView.setText(title);
             overviewTxtView.setText(overview);
             ratingBar.setRating((float)rating/2);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

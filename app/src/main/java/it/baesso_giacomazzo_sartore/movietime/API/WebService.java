@@ -58,7 +58,7 @@ public class WebService {
             @Override
             @EverythingIsNonNull
             public void onFailure(Call<PopularResult> call, Throwable t) {
-                Log.e("Filtro ",t.getMessage());
+                Log.e("Filtro ", t.getMessage());
             }
         });
     }

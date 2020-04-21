@@ -7,4 +7,5 @@
     <color name="veryDarkGreyALittleTransparent">#DD212121</color>
     <color name="white">#FFFFFF</color>
     <color name="textDark">#212121</color>
+    <color name="red">#F44336</color>
 </resources>
