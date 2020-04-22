@@ -24,6 +24,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
@@ -234,4 +236,42 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
         return super.onOptionsItemSelected(item);
     }
+
+    public List<Movie> sortList(List<Movie> list) {
+
+        for (Movie movie : list)
+        {
+            Collections.sort(list, new Comparator<Movie>() {
+                @Override
+                public int compare(Movie movie1, Movie movie2) {
+                    String s1 = movie1.getOriginal_title();
+                    String s2 = movie2.getOriginal_title();
+                    return s1.compareToIgnoreCase(s2);
+                }
+            });
+        }
+        return list;
+    }
+
+    /*
+    void showList(List<Movie> list)
+    {
+        List<Movie> filteredList = new ArrayList<>();
+
+        if(PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false))
+        {
+            for (Movie movie : list)
+            {
+                if(!movie.isAdult())
+                    filteredList.add(movie);
+            }
+        }
+        else
+            filteredList.addAll(list);
+
+        mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+    */
 }
