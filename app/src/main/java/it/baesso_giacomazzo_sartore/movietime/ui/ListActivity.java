@@ -2,26 +2,34 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +43,7 @@ import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 
-public class ListActivity extends AppCompatActivity implements ListActivityInterface {
+public class ListActivity extends AppCompatActivity implements ListActivityInterface, MaterialSearchBar.OnSearchActionListener {
 
     RecyclerView recyclerView;
     RecyclerViewFilmsAdapter mAdapter;
@@ -48,10 +56,12 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     ProgressBar progressBar;
     Chip goToTop;
+    MaterialSearchBar searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_list);
 
         prepareSpanCount();
@@ -62,6 +72,28 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
         progressBar = findViewById(R.id.listActivity_progressBar);
         goToTop = findViewById(R.id.listActivity_chip);
+
+        searchBar = findViewById(R.id.listActivity_searchBar);
+        searchBar.setOnSearchActionListener(this);
+
+        searchBar.inflateMenu(R.menu.movie_menu);
+
+        searchBar.setCardViewElevation(10);
+        searchBar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -86,29 +118,22 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         updateMoviesList();
     }
 
-    void updateMoviesList()
-    {
-        if(isNetworkAvailable())
-        {
+    void updateMoviesList() {
+        if (isNetworkAvailable()) {
             WebService webService = WebService.getInstance();
             webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload);
             nextPageToDownload++;
-        }
-        else
-        {
+        } else {
             prepareOfflineList();
         }
     }
 
-    void prepareOfflineList()
-    {
+    void prepareOfflineList() {
         cachedMovies = new ArrayList<>();
-        Cursor movies = ListActivity.this.getContentResolver().query(DbProvider.MOVIES_URI, null,null,null,null);
+        Cursor movies = ListActivity.this.getContentResolver().query(DbProvider.MOVIES_URI, null, null, null, null);
 
-        if(movies != null)
-        {
-            while(movies.moveToNext())
-            {
+        if (movies != null) {
+            while (movies.moveToNext()) {
                 Movie movie = new Movie();
                 movie.setId(movies.getString(movies.getColumnIndex(DbStrings._ID)));
                 movie.setOriginal_title(movies.getString(movies.getColumnIndex(DbStrings.ORIGINAL_TITLE)));
@@ -130,13 +155,11 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     public void showApiCallResult(PopularResult result) {
-        if(mAdapter != null && mAdapter.getMovies() != null)
-        {
+        if (mAdapter != null && mAdapter.getMovies() != null) {
             mAdapter.getMovies().addAll(result.getResults());
             mAdapter.notifyDataSetChanged();
             goToTop.setVisibility(View.VISIBLE);
-        }
-        else
+        } else
             showList(result.getResults());
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -152,19 +175,15 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         updateMoviesList();
     }
 
-    void showList(List<Movie> list)
-    {
+    void showList(List<Movie> list) {
         List<Movie> filteredList = new ArrayList<>();
 
-        if(PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false))
-        {
-            for (Movie movie : list)
-            {
-                if(!movie.isAdult())
+        if (PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false)) {
+            for (Movie movie : list) {
+                if (!movie.isAdult())
                     filteredList.add(movie);
             }
-        }
-        else
+        } else
             filteredList.addAll(list);
 
         mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this);
@@ -174,14 +193,13 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager == null)
+        if (connectivityManager == null)
             return false;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
 
-    void showCustomSnackbar(String text, int icon, int backgroundColor)
-    {
+    void showCustomSnackbar(String text, int icon, int backgroundColor) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG);
         View snackbarLayout = snackbar.getView();
         TextView textView = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
@@ -192,12 +210,11 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         snackbar.show();
     }
 
-    void prepareSpanCount()
-    {
+    void prepareSpanCount() {
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             spanCount = 3;
-         else
+        else
             spanCount = 2;
     }
 
@@ -211,18 +228,13 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId())
-        {
-            case R.id.toolbar_parentalControl:
-            {
+        switch (item.getItemId()) {
+            case R.id.toolbar_parentalControl: {
                 DialogFragment dialog;
 
-                if(PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false))
-                {
+                if (PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false)) {
                     dialog = new RemoveParentalControlDialog();
-                }
-                else
-                {
+                } else {
                     dialog = new ParentalControlDialog();
                 }
 
@@ -234,4 +246,22 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+        String s = enabled ? "enabled" : "disabled";
+        Toast.makeText(ListActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+        Toast.makeText(ListActivity.this, "Search: " + text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {
+
+    }
+
+
 }
