@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ListActivity">
 
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/listActivity_searchBar"
+        style="@style/searchBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mt_hint="Custom hint"
+        app:mt_maxSuggestionsCount="10"
+        app:mt_speechMode="false"
+        app:mt_placeholder="@string/app_name" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/listActivity_searchBar"
         android:id="@+id/listActivity_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="50dp"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:paddingBottom="50dp" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/listActivity_chip"
         style="@style/Widget.MaterialComponents.Chip.Action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:chipIcon="@drawable/ic_arrow_upward_black_24dp"
-        android:text="Torna su"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:padding="4dp"
-        android:visibility="invisible"/>
+        android:text="Torna su"
+        android:visibility="invisible"
+        app:chipIcon="@drawable/ic_arrow_upward_black_24dp" />
 
     <ProgressBar
         android:id="@+id/listActivity_progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:indeterminateTint="@color/colorPrimary"
-        android:layout_marginBottom="16dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:indeterminateTint="@color/colorPrimary" />
 
 </RelativeLayout>

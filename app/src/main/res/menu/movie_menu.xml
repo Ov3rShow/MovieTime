@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/toolbar_search"
-        android:icon="@drawable/ic_search"
-        android:title="settings"
-        app:showAsAction="ifRoom"/>
-
     <item android:id="@+id/toolbar_parentalControl"
         android:title="Parental control"
         app:showAsAction="never"/>
