@@ -61,12 +61,18 @@ public class DetailActivity extends AppCompatActivity {
                     image = getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH);
             }
 
-            Glide.with(DetailActivity.this)
-                    .load("https://image.tmdb.org/t/p/w500".concat(image))
-                    .apply(new RequestOptions().centerCrop())
-                    .placeholder(getDrawable(R.drawable.placeholder))
-                    .error(getDrawable(R.drawable.error))
-                    .into(imageView);
+            if(image == null)
+            {
+                imageView.setImageDrawable(getDrawable(R.drawable.error));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+            else
+                Glide.with(DetailActivity.this)
+                        .load("https://image.tmdb.org/t/p/w500".concat(image))
+                        .apply(new RequestOptions().centerCrop())
+                        .placeholder(getDrawable(R.drawable.placeholder))
+                        .error(getDrawable(R.drawable.error))
+                        .into(imageView);
 
             titleTxtView.setText(title);
             overviewTxtView.setText(overview);
