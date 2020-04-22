@@ -6,4 +6,8 @@
         android:title="Parental control"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/toolbar_sortByName"
+        android:title="Ordina per nome"
+        app:showAsAction="never"/>
+
 </menu>

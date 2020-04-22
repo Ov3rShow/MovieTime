@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.R;
@@ -52,12 +54,18 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         final TextView textView = holder.cellView.findViewById(R.id.cell_textView);
         final CardView cardView = holder.cellView.findViewById(R.id.cell_cardView);
 
-        Glide.with(context)
-                .load("https://image.tmdb.org/t/p/w500".concat(movies.get(position).getPoster_path()))
-                .apply(new RequestOptions().centerCrop())
-                .placeholder(context.getDrawable(R.drawable.placeholder))
-                .error(context.getDrawable(R.drawable.error))
-                .into(imageView);
+        if(movies.get(position).getPoster_path() == null)
+        {
+            imageView.setImageDrawable(context.getDrawable(R.drawable.error));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+        else
+            Glide.with(context)
+                    .load("https://image.tmdb.org/t/p/w500".concat(movies.get(position).getPoster_path()))
+                    .apply(new RequestOptions().centerCrop())
+                    .placeholder(context.getDrawable(R.drawable.placeholder))
+                    .error(context.getDrawable(R.drawable.error))
+                    .into(imageView);
 
         textView.setText(movies.get(position).getOriginal_title());
 
@@ -100,5 +108,16 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
             super(cellView);
             this.cellView = cellView;
         }
+    }
+
+    void sortList() {
+        Collections.sort(movies, new Comparator<Movie>() {
+            @Override
+            public int compare(Movie movie1, Movie movie2) {
+                String s1 = movie1.getOriginal_title();
+                String s2 = movie2.getOriginal_title();
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
     }
 }

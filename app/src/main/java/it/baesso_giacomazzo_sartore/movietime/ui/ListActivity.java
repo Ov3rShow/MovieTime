@@ -57,6 +57,8 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     Chip goToTop;
     MaterialSearchBar searchBar;
 
+    //enum per gestire se la lista è ordinata
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +96,13 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                         dialog.show(getSupportFragmentManager(), "TAG_AGGIUNTA");
 
                         break;
+                    }
+                    case R.id.toolbar_sortByName:
+                    {
+                        mAdapter.sortList();
+                        mAdapter.notifyDataSetChanged();
+
+                        //imposti lo stato di ordinamento
                     }
                 }
 
@@ -233,6 +242,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
         mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this);
         recyclerView.setAdapter(mAdapter);
+        //controlli se la lista è già stata ordinata e in caso la ordini
         mAdapter.notifyDataSetChanged();
     }
 
@@ -261,22 +271,6 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             spanCount = 3;
         else
             spanCount = 2;
-    }
-
-    public List<Movie> sortList(List<Movie> list) {
-
-        for (Movie movie : list)
-        {
-            Collections.sort(list, new Comparator<Movie>() {
-                @Override
-                public int compare(Movie movie1, Movie movie2) {
-                    String s1 = movie1.getOriginal_title();
-                    String s2 = movie2.getOriginal_title();
-                    return s1.compareToIgnoreCase(s2);
-                }
-            });
-        }
-        return list;
     }
 
     @Override
