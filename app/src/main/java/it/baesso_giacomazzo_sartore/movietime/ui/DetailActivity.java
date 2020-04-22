@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
+import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 
@@ -45,20 +45,20 @@ public class DetailActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null)
         {
-            String image = getIntent().getExtras().getString(DbStrings.BACKDROP_PATH);
-            String title = getIntent().getExtras().getString(DbStrings.ORIGINAL_TITLE);
-            String overview = getIntent().getExtras().getString(DbStrings.OVERVIEW);
-            double rating = getIntent().getExtras().getDouble(DbStrings.VOTE_AVERAGE);
+            String image = getIntent().getExtras().getString(MovieDbStrings.BACKDROP_PATH);
+            String title = getIntent().getExtras().getString(MovieDbStrings.ORIGINAL_TITLE);
+            String overview = getIntent().getExtras().getString(MovieDbStrings.OVERVIEW);
+            double rating = getIntent().getExtras().getDouble(MovieDbStrings.VOTE_AVERAGE);
 
             int orientation = getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             {
-                image = getIntent().getExtras().getString(DbStrings.POSTER_PATH);
+                image = getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH);
             }
             else
             {
                 if(image == null)
-                    image = getIntent().getExtras().getString(DbStrings.POSTER_PATH);
+                    image = getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH);
             }
 
             Glide.with(DetailActivity.this)

@@ -25,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DbStrings.CREATE_TABLE);
+        sqLiteDatabase.execSQL(MovieDbStrings.CREATE_TABLE);
     }
 
     @Override

@@ -45,11 +45,11 @@ public class DbProvider extends ContentProvider {
         SQLiteQueryBuilder vBuilder = new SQLiteQueryBuilder();
         switch (mUriMatcher.match(uri)) {
             case SINGLE_MOVIE:
-                vBuilder.setTables(DbStrings.TABLE_NAME);
-                vBuilder.appendWhere(DbStrings._ID + " = " + uri.getLastPathSegment());
+                vBuilder.setTables(MovieDbStrings.TABLE_NAME);
+                vBuilder.appendWhere(MovieDbStrings._ID + " = " + uri.getLastPathSegment());
                 break;
             case ALL_MOVIE:
-                vBuilder.setTables(DbStrings.TABLE_NAME);
+                vBuilder.setTables(MovieDbStrings.TABLE_NAME);
                 break;
         }
 
@@ -79,7 +79,7 @@ public class DbProvider extends ContentProvider {
 
         if (mUriMatcher.match(uri) == ALL_MOVIE) {
             SQLiteDatabase vDb = mDb.getWritableDatabase();
-            long vResult = vDb.insert(DbStrings.TABLE_NAME, null, values);
+            long vResult = vDb.insert(MovieDbStrings.TABLE_NAME, null, values);
             String vResultString = ContentResolver.SCHEME_CONTENT + "://" + BASE_PATH_MOVIES + "/" + vResult;
             getContext().getContentResolver().notifyChange(uri, null);
             return Uri.parse(vResultString);
@@ -93,12 +93,12 @@ public class DbProvider extends ContentProvider {
         SQLiteDatabase vDb = mDb.getWritableDatabase();
         switch (mUriMatcher.match(uri)) {
             case ALL_MOVIE:
-                vTable = DbStrings.TABLE_NAME;
+                vTable = MovieDbStrings.TABLE_NAME;
                 vQuery = selection;
                 break;
             case SINGLE_MOVIE:
-                vTable = DbStrings.TABLE_NAME;
-                vQuery = DbStrings._ID + " = " + uri.getLastPathSegment();
+                vTable = MovieDbStrings.TABLE_NAME;
+                vQuery = MovieDbStrings._ID + " = " + uri.getLastPathSegment();
                 if (selection != null) {
                     vQuery += " AND " + selection;
                 }
@@ -116,12 +116,12 @@ public class DbProvider extends ContentProvider {
         SQLiteDatabase vDb = mDb.getWritableDatabase();
         switch (mUriMatcher.match(uri)) {
             case ALL_MOVIE:
-                vTable = DbStrings.TABLE_NAME;
+                vTable = MovieDbStrings.TABLE_NAME;
                 vQuery = selection;
                 break;
             case SINGLE_MOVIE:
-                vTable = DbStrings.TABLE_NAME;
-                vQuery = DbStrings._ID + " = " + uri.getLastPathSegment();
+                vTable = MovieDbStrings.TABLE_NAME;
+                vQuery = MovieDbStrings._ID + " = " + uri.getLastPathSegment();
                 if (selection != null) {
                     vQuery += " AND " + selection;
                 }

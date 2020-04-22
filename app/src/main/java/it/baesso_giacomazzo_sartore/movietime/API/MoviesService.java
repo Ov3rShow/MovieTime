@@ -1,16 +1,10 @@
 package it.baesso_giacomazzo_sartore.movietime.API;
 
-import android.graphics.Movie;
-
-import java.util.List;
 import java.util.Map;
 
-import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface MoviesService {

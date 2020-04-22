@@ -2,18 +2,16 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +38,7 @@ import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
+import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 
@@ -79,6 +76,30 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         searchBar.setOnSearchActionListener(this);
 
         searchBar.inflateMenu(R.menu.movie_menu);
+
+        searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.toolbar_parentalControl: {
+                        DialogFragment dialog;
+
+                        if (PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false)) {
+                            dialog = new RemoveParentalControlDialog();
+                        } else {
+                            dialog = new ParentalControlDialog();
+                        }
+
+                        dialog.show(getSupportFragmentManager(), "TAG_AGGIUNTA");
+
+                        break;
+                    }
+                }
+
+                return false;
+            }
+        });
 
         searchBar.setCardViewElevation(10);
         searchBar.addTextChangeListener(new TextWatcher() {
@@ -137,13 +158,13 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         if (movies != null) {
             while (movies.moveToNext()) {
                 Movie movie = new Movie();
-                movie.setId(movies.getString(movies.getColumnIndex(DbStrings._ID)));
-                movie.setOriginal_title(movies.getString(movies.getColumnIndex(DbStrings.ORIGINAL_TITLE)));
-                movie.setOverview(movies.getString(movies.getColumnIndex(DbStrings.OVERVIEW)));
-                movie.setPoster_path(movies.getString(movies.getColumnIndex(DbStrings.POSTER_PATH)));
-                movie.setBackdrop_path(movies.getString(movies.getColumnIndex(DbStrings.BACKDROP_PATH)));
-                movie.setVote_average(movies.getDouble(movies.getColumnIndex(DbStrings.VOTE_AVERAGE)));
-                movie.setAdult(movies.getInt(movies.getColumnIndex(DbStrings.ADULT)) == 1);
+                movie.setId(movies.getString(movies.getColumnIndex(MovieDbStrings._ID)));
+                movie.setOriginal_title(movies.getString(movies.getColumnIndex(MovieDbStrings.ORIGINAL_TITLE)));
+                movie.setOverview(movies.getString(movies.getColumnIndex(MovieDbStrings.OVERVIEW)));
+                movie.setPoster_path(movies.getString(movies.getColumnIndex(MovieDbStrings.POSTER_PATH)));
+                movie.setBackdrop_path(movies.getString(movies.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));
+                movie.setVote_average(movies.getDouble(movies.getColumnIndex(MovieDbStrings.VOTE_AVERAGE)));
+                movie.setAdult(movies.getInt(movies.getColumnIndex(MovieDbStrings.ADULT)) == 1);
 
                 cachedMovies.add(movie);
             }
@@ -220,35 +241,6 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             spanCount = 2;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.movie_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.toolbar_parentalControl: {
-                DialogFragment dialog;
-
-                if (PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false)) {
-                    dialog = new RemoveParentalControlDialog();
-                } else {
-                    dialog = new ParentalControlDialog();
-                }
-
-                dialog.show(getSupportFragmentManager(), "TAG_AGGIUNTA");
-
-                break;
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public List<Movie> sortList(List<Movie> list) {
 
         for (Movie movie : list)
@@ -265,4 +257,19 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         return list;
     }
 
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+        String s = enabled ? "enabled" : "disabled";
+        Toast.makeText(ListActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+        Toast.makeText(ListActivity.this, "Search: " + text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {
+        Log.e("Ciao", "");
+    }
 }

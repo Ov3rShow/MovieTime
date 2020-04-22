@@ -19,7 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbStrings;
+import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
 public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewFilmsAdapter.MyViewHolder> {
@@ -66,14 +66,23 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(DbStrings.ORIGINAL_TITLE, movies.get(position).getOriginal_title());
-                bundle.putString(DbStrings.OVERVIEW, movies.get(position).getOverview());
-                bundle.putString(DbStrings.BACKDROP_PATH, movies.get(position).getBackdrop_path());
-                bundle.putString(DbStrings.POSTER_PATH, movies.get(position).getPoster_path());
-                bundle.putDouble(DbStrings.VOTE_AVERAGE, movies.get(position).getVote_average());
-                bundle.putBoolean(DbStrings.ADULT, movies.get(position).isAdult());
+                bundle.putString(MovieDbStrings.ORIGINAL_TITLE, movies.get(position).getOriginal_title());
+                bundle.putString(MovieDbStrings.OVERVIEW, movies.get(position).getOverview());
+                bundle.putString(MovieDbStrings.BACKDROP_PATH, movies.get(position).getBackdrop_path());
+                bundle.putString(MovieDbStrings.POSTER_PATH, movies.get(position).getPoster_path());
+                bundle.putDouble(MovieDbStrings.VOTE_AVERAGE, movies.get(position).getVote_average());
+                bundle.putBoolean(MovieDbStrings.ADULT, movies.get(position).isAdult());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+            }
+        });
+
+        cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                LongPressDialog dialog = new LongPressDialog(movies.get(position).getOriginal_title(), movies.get(position).getId());
+                dialog.show(((ListActivity)context).getSupportFragmentManager(), "TAG_PREFERITI");
+                return false;
             }
         });
     }
