@@ -110,6 +110,28 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
+                //cerca
+
+                List<Movie> movieSearched = new ArrayList<Movie>();
+
+
+                Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.ORIGINAL_TITLE + " LIKE =?",
+                        new String[]{String.valueOf(charSequence)}, null);
+
+               for (int x=0;x<movieCursor.getCount();x++){
+
+                   Movie movie = new Movie();
+                   movie.setId(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings._ID)));
+                   movie.setOriginal_title(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.ORIGINAL_TITLE)));
+                   movie.setOverview(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.OVERVIEW)));
+                   movie.setPoster_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.POSTER_PATH)));
+                   movie.setBackdrop_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));
+                   movie.setVote_average(movieCursor.getDouble(movieCursor.getColumnIndex(MovieDbStrings.VOTE_AVERAGE)));
+                   movie.setAdult(movieCursor.getInt(movieCursor.getColumnIndex(MovieDbStrings.ADULT)) == 1);
+                   movieSearched.add(movie);
+               }
+
+                showList(movieSearched);
             }
 
             @Override
@@ -259,8 +281,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     public void onSearchStateChanged(boolean enabled) {
-        String s = enabled ? "enabled" : "disabled";
-        Toast.makeText(ListActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -270,6 +291,6 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     public void onButtonClicked(int buttonCode) {
-        Log.e("Ciao", "");
+
     }
 }
