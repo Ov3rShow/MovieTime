@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -104,6 +105,10 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
                         //imposti lo stato di ordinamento
                     }
+                    case R.id.toolbar_watchLater:
+                    {
+                        startActivity(new Intent(ListActivity.this, WatchLaterActivity.class));
+                    }
                 }
 
                 return false;
@@ -118,16 +123,15 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
-                //cerca
 
-                List<Movie> movieSearched = new ArrayList<Movie>();
+                List<Movie> movieSearched = new ArrayList<>();
 
+                Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.ORIGINAL_TITLE + " LIKE '%" + charSequence + "%'", null, null);
 
-                Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.ORIGINAL_TITLE + " LIKE =?",
-                        new String[]{String.valueOf(charSequence)}, null);
+                if(movieCursor == null)
+                    return;
 
-               for (int x=0;x<movieCursor.getCount();x++){
+               while(movieCursor.moveToNext()){
 
                    Movie movie = new Movie();
                    movie.setId(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings._ID)));
@@ -139,6 +143,8 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                    movie.setAdult(movieCursor.getInt(movieCursor.getColumnIndex(MovieDbStrings.ADULT)) == 1);
                    movieSearched.add(movie);
                }
+
+                movieCursor.close();
 
                 showList(movieSearched);
             }
@@ -179,6 +185,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             nextPageToDownload++;
         } else {
             prepareOfflineList();
+            showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent);
         }
     }
 
@@ -200,11 +207,12 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                 cachedMovies.add(movie);
             }
 
+            movies.close();
+
             showList(cachedMovies);
         }
 
         progressBar.setVisibility(View.INVISIBLE);
-        showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent);
     }
 
     @Override

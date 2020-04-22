@@ -32,7 +32,11 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         if(getSupportActionBar() != null)
+        {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setSubtitle("Dettagli film");
+        }
+
 
         imageView = findViewById(R.id.detail_img);
         titleTxtView = findViewById(R.id.detail_title);

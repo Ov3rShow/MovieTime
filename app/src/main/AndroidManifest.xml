@@ -12,12 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme1">
-        <activity android:name=".ui.DetailActivity" android:parentActivityName=".ui.ListActivity">
+        <activity android:name=".ui.WatchLaterActivity"></activity>
+        <activity
+            android:name=".ui.DetailActivity"
+            android:parentActivityName=".ui.ListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.ListActivity"/>
+                android:value=".ui.ListActivity" />
         </activity>
-        <activity android:name=".ui.ListActivity"
+        <activity
+            android:name=".ui.ListActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

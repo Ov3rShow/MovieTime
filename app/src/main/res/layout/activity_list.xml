@@ -14,7 +14,7 @@
         app:mt_hint="Cerca film..."
         app:mt_maxSuggestionsCount="10"
         app:mt_speechMode="false"
-        app:mt_placeholder="@string/app_name" />
+        app:mt_placeholder="@string/app_name"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/listActivity_searchBar"
