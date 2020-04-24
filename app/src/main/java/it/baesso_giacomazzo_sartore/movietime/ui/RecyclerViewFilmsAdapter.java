@@ -1,5 +1,6 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +40,17 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
     List<Movie> getMovies()
     {
         return movies;
+    }
+
+    boolean checkIfExists(String id)
+    {
+        for (Movie m : movies)
+        {
+            if(m.getId().equals(id))
+                return true;
+        }
+
+        return false;
     }
 
     @NonNull
@@ -89,7 +102,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
             @Override
             public boolean onLongClick(View view) {
                 LongPressDialog dialog = new LongPressDialog(movies.get(position).getOriginal_title(), movies.get(position).getId());
-                dialog.show(((ListActivity)context).getSupportFragmentManager(), "TAG_PREFERITI");
+                dialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "TAG_PREFERITI");
                 return false;
             }
         });

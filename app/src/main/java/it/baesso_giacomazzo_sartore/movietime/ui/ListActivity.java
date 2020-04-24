@@ -11,14 +11,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -30,8 +29,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
@@ -57,6 +54,8 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     ProgressBar progressBar;
     Chip goToTop;
     MaterialSearchBar searchBar;
+
+    boolean activityStartedOffline = false;
 
     //enum per gestire se la lista è ordinata
 
@@ -104,6 +103,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                         mAdapter.notifyDataSetChanged();
 
                         //imposti lo stato di ordinamento
+                        break;
                     }
                     case R.id.toolbar_watchLater:
                     {
@@ -161,9 +161,19 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (!recyclerView.canScrollVertically(1)) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    refreshList();
+                    if(isNetworkAvailable())
+                    {
+                        progressBar.setVisibility(View.VISIBLE);
+                        refreshList();
+                    }
                 }
+                else if (!recyclerView.canScrollVertically(-1))
+                {
+                    goToTop.setVisibility(View.INVISIBLE);
+                }
+
+                if(recyclerView.computeVerticalScrollOffset() > 1000)
+                    goToTop.setVisibility(View.VISIBLE);
             }
         });
 
@@ -185,7 +195,8 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             nextPageToDownload++;
         } else {
             prepareOfflineList();
-            showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent);
+            showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent, R.color.textDark);
+            activityStartedOffline = true;
         }
     }
 
@@ -217,10 +228,24 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     public void showApiCallResult(PopularResult result) {
-        if (mAdapter != null && mAdapter.getMovies() != null) {
-            mAdapter.getMovies().addAll(result.getResults());
+        if (mAdapter != null && mAdapter.getMovies() != null)
+        {
+
+            if(activityStartedOffline)
+            {
+                for(Movie m : result.getResults())
+                {
+                    if(!mAdapter.checkIfExists(m.getId()))
+                        mAdapter.getMovies().add(m);
+                }
+
+                activityStartedOffline = false;
+            }
+            else
+                mAdapter.getMovies().addAll(result.getResults());
+
             mAdapter.notifyDataSetChanged();
-            goToTop.setVisibility(View.VISIBLE);
+            //goToTop.setVisibility(View.VISIBLE);
         } else
             showList(result.getResults());
 
@@ -228,8 +253,8 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     }
 
     @Override
-    public void showSnackBar(String text, int icon, int backgroundColor) {
-        showCustomSnackbar(text, icon, backgroundColor);
+    public void showSnackBar(String text, int icon, int backgroundColor, int textIconColor) {
+        showCustomSnackbar(text, icon, backgroundColor, textIconColor);
     }
 
     @Override
@@ -262,14 +287,17 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         return activeNetworkInfo != null;
     }
 
-    void showCustomSnackbar(String text, int icon, int backgroundColor) {
+    void showCustomSnackbar(String text, int icon, int backgroundColor, int textIconColor) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG);
         View snackbarLayout = snackbar.getView();
         TextView textView = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setTypeface(null, Typeface.BOLD);
         textView.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
         textView.setCompoundDrawablePadding(16);
         snackbar.setBackgroundTint(getColor(backgroundColor));
-        snackbar.setTextColor(getColor(R.color.textDark));
+        snackbar.setTextColor(getColor(textIconColor));
+
         snackbar.show();
     }
 

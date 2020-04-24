@@ -7,7 +7,7 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/toolbar_watchLater"
-        android:title="Da vedere"
+        android:title="Guarda più tardi"
         app:showAsAction="never"/>
 
     <item android:id="@+id/toolbar_parentalControl"

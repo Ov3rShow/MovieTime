@@ -13,6 +13,7 @@
         android:minWidth="500dp">
 
         <TextView
+            android:id="@+id/LongPressDialog_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Imposta controllo genitori"
@@ -32,15 +33,20 @@
             android:clickable="true"
             android:focusable="true">
 
-            <CheckBox
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Guarda più tardi"
+                android:layout_gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:textSize="18sp"/>
+
+            <Switch
                 android:id="@+id/LongPressDialog_WatchLaterCheck"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Film da vedere"/>
+                android:layout_gravity="center_vertical"/>
 
         </LinearLayout>
 

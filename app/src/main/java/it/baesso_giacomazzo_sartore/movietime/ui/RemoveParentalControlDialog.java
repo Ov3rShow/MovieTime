@@ -49,7 +49,7 @@ public class RemoveParentalControlDialog extends DialogFragment {
                     if(context instanceof ListActivityInterface)
                     {
                         ((ListActivityInterface)context).refreshList();
-                        ((ListActivityInterface)context).showSnackBar("Parental control disattivato", R.drawable.ic_lock_black_24dp, R.color.colorAccent);
+                        ((ListActivityInterface)context).showSnackBar("Parental control disattivato", R.drawable.ic_lock_black_24dp, R.color.colorAccent, R.color.textDark);
                     }
 
                     dismiss();

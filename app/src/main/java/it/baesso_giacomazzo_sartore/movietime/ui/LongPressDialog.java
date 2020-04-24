@@ -9,12 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
@@ -26,12 +30,12 @@ public class LongPressDialog extends DialogFragment {
     private Context context;
     private boolean isWatchLater = false;
 
+    Switch watchLaterCheckbox;
+
     LongPressDialog(String movieTitle, String movieId)
     {
         this.movieTitle = movieTitle;
         this.movieId = movieId;
-
-        Log.e("ID ", this.movieId);
     }
 
     @Override
@@ -46,7 +50,9 @@ public class LongPressDialog extends DialogFragment {
         View vView = inflater.inflate(R.layout.dialog_long_press, container, false);
 
         LinearLayout watchLaterLayout = vView.findViewById(R.id.LongPressDialog_WatchLaterLayout);
-        final CheckBox watchLaterCheckbox = vView.findViewById(R.id.LongPressDialog_WatchLaterCheck);
+        watchLaterCheckbox = vView.findViewById(R.id.LongPressDialog_WatchLaterCheck);
+        TextView titleTextView = vView.findViewById(R.id.LongPressDialog_Title);
+        titleTextView.setText(movieTitle);
 
         getCurrentState();
 
@@ -55,17 +61,39 @@ public class LongPressDialog extends DialogFragment {
         watchLaterLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isWatchLater = !isWatchLater;
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MovieDbStrings.WATCH_LATER, isWatchLater? 1 : 0);
-                if(context.getContentResolver().update(DbProvider.MOVIES_URI, contentValues , MovieDbStrings._ID + " = " + movieId, null) > 0)
-                {
-                    watchLaterCheckbox.setChecked(!watchLaterCheckbox.isChecked());
-                }
+                watchLaterCheckbox.setChecked(!watchLaterCheckbox.isChecked());
+                itemTapped();
+            }
+        });
+
+        watchLaterCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemTapped();
             }
         });
 
         return vView;
+    }
+
+    private void itemTapped()
+    {
+        isWatchLater = !isWatchLater;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieDbStrings.WATCH_LATER, isWatchLater? 1 : 0);
+        if(context.getContentResolver().update(DbProvider.MOVIES_URI, contentValues , MovieDbStrings._ID + " = " + movieId, null) > 0)
+        {
+            //aggiorno la lista solo se l'activity che ha aperto il dialog è la WatchLaterActivity
+            if(context instanceof WatchLaterActivity)
+                ((ListActivityInterface) context).refreshList();
+
+            if(watchLaterCheckbox.isChecked())
+                ((ListActivityInterface) context).showSnackBar("Film aggiunto a guarda più tardi", R.drawable.ic_check_circle_black_24dp, R.color.green, R.color.white);
+            else
+                ((ListActivityInterface) context).showSnackBar("Film rimosso da guarda più tardi", R.drawable.ic_check_circle_black_24dp, R.color.red, R.color.white);
+
+            dismiss();
+        }
     }
 
     private void getCurrentState()
