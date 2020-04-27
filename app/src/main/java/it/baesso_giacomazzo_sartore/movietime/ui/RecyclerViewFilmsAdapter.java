@@ -1,8 +1,10 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.R;
+import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
@@ -66,6 +69,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         final ImageView imageView = holder.cellView.findViewById(R.id.cell_imageView);
         final TextView textView = holder.cellView.findViewById(R.id.cell_textView);
         final CardView cardView = holder.cellView.findViewById(R.id.cell_cardView);
+        final ImageView watchLaterImg = holder.cellView.findViewById(R.id.cell_watchLater);
 
         if(movies.get(position).getPoster_path() == null)
         {
@@ -79,6 +83,20 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
                     .placeholder(context.getDrawable(R.drawable.placeholder))
                     .error(context.getDrawable(R.drawable.error))
                     .into(imageView);
+
+        Cursor cursor = context.getContentResolver().query(DbProvider.MOVIES_URI, new String[]{MovieDbStrings.WATCH_LATER}, MovieDbStrings._ID + " = " + movies.get(position).getId(),null,null);
+        if(cursor != null)
+        {
+            cursor.moveToFirst();
+
+            if(cursor.getCount() > 0 && cursor.getInt(cursor.getColumnIndex(MovieDbStrings.WATCH_LATER)) == 1)
+                watchLaterImg.setVisibility(View.VISIBLE);
+            else
+                watchLaterImg.setVisibility(View.INVISIBLE);
+
+            cursor.close();
+        }
+
 
         textView.setText(movies.get(position).getOriginal_title());
 
@@ -101,7 +119,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                LongPressDialog dialog = new LongPressDialog(movies.get(position).getOriginal_title(), movies.get(position).getId());
+                LongPressDialog dialog = new LongPressDialog(movies.get(position).getOriginal_title(), movies.get(position).getId(), watchLaterImg);
                 dialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "TAG_PREFERITI");
                 return false;
             }

@@ -124,6 +124,10 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                //se entra in textchanged senza che nessun carattere sia cambiato esco dal metodo
+                if(charSequence.toString().equals("") && i2 == 0 && i1 == 0)
+                    return;
+
                 List<Movie> movieSearched = new ArrayList<>();
 
                 Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.ORIGINAL_TITLE + " LIKE '%" + charSequence + "%'", null, null);
@@ -322,5 +326,12 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     @Override
     public void onButtonClicked(int buttonCode) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        refreshList();
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -30,12 +31,14 @@ public class LongPressDialog extends DialogFragment {
     private Context context;
     private boolean isWatchLater = false;
 
-    Switch watchLaterCheckbox;
+    private Switch watchLaterCheckbox;
+    private ImageView watchLaterImg;
 
-    LongPressDialog(String movieTitle, String movieId)
+    LongPressDialog(String movieTitle, String movieId, ImageView watchLaterImg)
     {
         this.movieTitle = movieTitle;
         this.movieId = movieId;
+        this.watchLaterImg = watchLaterImg;
     }
 
     @Override
@@ -83,6 +86,8 @@ public class LongPressDialog extends DialogFragment {
         contentValues.put(MovieDbStrings.WATCH_LATER, isWatchLater? 1 : 0);
         if(context.getContentResolver().update(DbProvider.MOVIES_URI, contentValues , MovieDbStrings._ID + " = " + movieId, null) > 0)
         {
+            watchLaterImg.setVisibility(isWatchLater? View.VISIBLE : View.INVISIBLE);
+
             //aggiorno la lista solo se l'activity che ha aperto il dialog è la WatchLaterActivity
             if(context instanceof WatchLaterActivity)
                 ((ListActivityInterface) context).refreshList();

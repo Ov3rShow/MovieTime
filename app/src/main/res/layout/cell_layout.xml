@@ -19,6 +19,18 @@
         android:layout_height="match_parent"
         tools:ignore="ContentDescription"/>
 
+    <ImageView
+        android:id="@+id/cell_watchLater"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_watch_later_black_24dp"
+        android:tint="@color/colorAccent"
+        android:background="@drawable/circle_shape"
+        android:padding="2dp"
+        android:visibility="invisible"/>
+
     <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
