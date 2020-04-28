@@ -36,7 +36,7 @@ public class WebService {
         return instance;
     }
 
-    public void getAllPopular(final Context context, String key, String localization, final int page){
+    public void getAllPopular(final Context context, String key, String localization, final int page, final boolean clearDb){
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("api_key", key);
@@ -51,10 +51,10 @@ public class WebService {
                 if(context instanceof ListActivityInterface)
                     ((ListActivityInterface)context).showApiCallResult(response.body());
 
-                if(response.body() != null && response.body().getResults() != null /*&& (page == 1 && DbSaver.dbSaveTimeCheck(context))*/)
+                if(response.body() != null && response.body().getResults() != null)
                 {
-                    if((page == 1 && DbSaver.dbSaveTimeCheck(context)) || page > 1)
-                        DbSaver.DbSaving(context, response.body().getResults(), page);
+                    if((clearDb /*&& DbSaver.dbSaveTimeCheck(context)*/) || page > 1)
+                        DbSaver.DbSaving(context, response.body().getResults(), page, clearDb);
                 }
             }
 

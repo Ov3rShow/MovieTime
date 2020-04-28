@@ -1,6 +1,7 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.DialogFragment;
@@ -57,6 +58,8 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     boolean activityStartedOffline = false;
 
+    final int WATCH_LATER_ACTIVITY_CODE = 1;
+
     //enum per gestire se la lista è ordinata
 
     @Override
@@ -78,6 +81,13 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         searchBar.setOnSearchActionListener(this);
 
         searchBar.inflateMenu(R.menu.movie_menu);
+
+        if(!isNetworkAvailable())
+        {
+            showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent, R.color.textDark);
+            activityStartedOffline = true;
+            nextPageToDownload = PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_page_index), 1);
+        }
 
         searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -107,7 +117,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                     }
                     case R.id.toolbar_watchLater:
                     {
-                        startActivity(new Intent(ListActivity.this, WatchLaterActivity.class));
+                        startActivityForResult(new Intent(ListActivity.this, WatchLaterActivity.class), WATCH_LATER_ACTIVITY_CODE);
                     }
                 }
 
@@ -189,18 +199,17 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             }
         });
 
-        updateMoviesList();
+        updateMoviesList(true);
     }
 
-    void updateMoviesList() {
+    void updateMoviesList(boolean clearDb) {
         if (isNetworkAvailable()) {
             WebService webService = WebService.getInstance();
-            webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload);
+            webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload, clearDb);
             nextPageToDownload++;
+            PrefsManager.getInstance(ListActivity.this).setPreference(getString(R.string.pref_page_index), nextPageToDownload);
         } else {
             prepareOfflineList();
-            showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent, R.color.textDark);
-            activityStartedOffline = true;
         }
     }
 
@@ -249,7 +258,6 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                 mAdapter.getMovies().addAll(result.getResults());
 
             mAdapter.notifyDataSetChanged();
-            //goToTop.setVisibility(View.VISIBLE);
         } else
             showList(result.getResults());
 
@@ -263,7 +271,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     public void refreshList() {
-        updateMoviesList();
+        updateMoviesList(false);
     }
 
     void showList(List<Movie> list) {
@@ -329,9 +337,10 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        refreshList();
+        if(requestCode == WATCH_LATER_ACTIVITY_CODE)
+            prepareOfflineList();
     }
 }

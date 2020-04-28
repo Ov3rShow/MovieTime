@@ -14,9 +14,11 @@ import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
 class DbSaver {
 
-    static void DbSaving(Context context, List<Movie> movies, int page){
+    static void DbSaving(Context context, List<Movie> movies, int page, boolean clearDb){
 
-        if(page == 1)
+        Log.w("PAGE, CLEAR ", page + " " + clearDb);
+
+        if(clearDb)
             context.getContentResolver().delete(DbProvider.MOVIES_URI, MovieDbStrings.WATCH_LATER + " = 0", null);
 
         for (Movie movie : movies)

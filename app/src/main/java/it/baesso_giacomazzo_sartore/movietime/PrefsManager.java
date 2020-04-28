@@ -49,4 +49,14 @@ public class PrefsManager {
     {
         return prefs.getLong(key, defaultValue);
     }
+
+    public void setPreference(String key, int value)
+    {
+        prefs.edit().putInt(key, value).apply();
+    }
+
+    public int getPreference(String key, int defaultValue)
+    {
+        return prefs.getInt(key, defaultValue);
+    }
 }

@@ -40,7 +40,8 @@
                 android:text="Guarda più tardi"
                 android:layout_gravity="center_vertical"
                 android:paddingVertical="8dp"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:layout_marginHorizontal="8dp"/>
 
             <Switch
                 android:id="@+id/LongPressDialog_WatchLaterCheck"

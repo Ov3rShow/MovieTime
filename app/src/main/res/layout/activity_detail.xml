@@ -47,7 +47,7 @@
                     android:layout_marginHorizontal="8dp"
                     app:srb_numStars="5"
                     app:srb_starWidth="30dp"
-                    app:srb_starHeight="30dp"
+                    app:srb_starHeight="40dp"
                     app:srb_starPadding="8dp"
                     app:srb_isIndicator="false"
                     app:srb_clickable="false"

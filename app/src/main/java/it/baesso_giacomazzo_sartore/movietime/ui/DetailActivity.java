@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -86,8 +85,13 @@ public class DetailActivity extends AppCompatActivity {
                 ageLimit.setVisibility(View.VISIBLE);
             }
 
+
+            if(overview == null || overview.equals(""))
+                overviewTxtView.setText("La trama di questo film non è disponibile :(");
+            else
+                overviewTxtView.setText(overview);
+
             titleTxtView.setText(title);
-            overviewTxtView.setText(overview);
             ratingBar.setRating((float)rating/2);
         }
     }

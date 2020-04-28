@@ -79,7 +79,7 @@ public class DbProvider extends ContentProvider {
 
         if (mUriMatcher.match(uri) == ALL_MOVIE) {
             SQLiteDatabase vDb = mDb.getWritableDatabase();
-            long vResult = vDb.insert(MovieDbStrings.TABLE_NAME, null, values);
+            long vResult = vDb.insertWithOnConflict(MovieDbStrings.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
             String vResultString = ContentResolver.SCHEME_CONTENT + "://" + BASE_PATH_MOVIES + "/" + vResult;
             getContext().getContentResolver().notifyChange(uri, null);
             return Uri.parse(vResultString);

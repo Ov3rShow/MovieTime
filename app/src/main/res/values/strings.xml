@@ -4,5 +4,6 @@
     <string name="images_base_path">https://image.tmdb.org/t/p/w500</string>
     <string name="pref_password">PREF_PASSWORD</string>
     <string name="pref_parental_control_enabled">PREF_PARENTAL_CONTROL_ENABLED</string>
+    <string name="pref_page_index">PREF_PAGE_INDEX</string>
     <string name="save_cache_db">SAVE_CACHE_DB</string>
 </resources>
