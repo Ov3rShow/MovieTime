@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.willy.ratingbar.ScaleRatingBar;
 
-import it.baesso_giacomazzo_sartore.movietime.API.MoviesService;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 
@@ -25,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView titleTxtView, overviewTxtView;
-    RatingBar ratingBar;
+    ScaleRatingBar ratingBar;
     ImageView ageLimit;
     View divider;
 

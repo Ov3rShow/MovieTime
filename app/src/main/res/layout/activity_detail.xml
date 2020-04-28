@@ -40,15 +40,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <RatingBar
+                <com.willy.ratingbar.ScaleRatingBar
                     android:id="@+id/detail_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:layout_marginHorizontal="16dp"
-                    style="?android:attr/ratingBarStyleIndicator"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_marginHorizontal="8dp"
+                    app:srb_numStars="5"
+                    app:srb_starWidth="30dp"
+                    app:srb_starHeight="30dp"
+                    app:srb_starPadding="8dp"
+                    app:srb_isIndicator="false"
+                    app:srb_clickable="false"
+                    app:srb_scrollable="false"
+                    app:srb_drawableEmpty="@drawable/icon_grey"
+                    app:srb_drawableFilled="@drawable/icon_color">
+                </com.willy.ratingbar.ScaleRatingBar>
 
                 <View
                     android:id="@+id/detail_divider"
