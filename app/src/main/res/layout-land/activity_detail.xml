@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDakrer">
 
 
     <LinearLayout
@@ -16,7 +17,8 @@
             android:id="@+id/detail_img"
             android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:src="@color/colorAccent" />
+            android:src="@color/colorAccent"
+            android:foreground="@drawable/backdrop_gradient_land"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -35,7 +37,20 @@
                     android:layout_marginVertical="8dp"
                     android:text="Titolo"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textSize="22sp" />
+                    android:textSize="26sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Valutazione"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,7 +64,7 @@
                         android:layout_marginHorizontal="8dp"
                         app:srb_numStars="5"
                         app:srb_starWidth="30dp"
-                        app:srb_starHeight="30dp"
+                        app:srb_starHeight="40dp"
                         app:srb_starPadding="8dp"
                         app:srb_isIndicator="false"
                         app:srb_clickable="false"
@@ -77,13 +92,23 @@
                 </LinearLayout>
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Trama"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"/>
+
+                <TextView
                     android:id="@+id/detail_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textColor="@color/hint"/>
 
             </LinearLayout>
 
