@@ -13,21 +13,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/detail_img"
+        <FrameLayout
             android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:src="@color/colorAccent"
-            android:foreground="@drawable/backdrop_gradient_land"/>
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/detail_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@color/colorAccent"
+                android:foreground="@drawable/backdrop_gradient_land"/>
+
+            <ImageView
+                android:id="@+id/detail_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="48dp"
+                android:src="@drawable/custom_button_back"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </FrameLayout>
 
         <ScrollView
+            android:id="@+id/detail_scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginTop="32dp">
 
                 <TextView
                     android:id="@+id/detail_title"
