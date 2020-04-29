@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
-            android:layout_width="200dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent">
 
             <ImageView
@@ -35,6 +35,17 @@
                 android:clickable="true"
                 android:focusable="true"/>
 
+            <ImageView
+                android:id="@+id/detail_watchLater"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="112dp"
+                android:src="@drawable/custom_watch_later_no"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"/>
+
         </FrameLayout>
 
         <ScrollView
@@ -45,15 +56,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="32dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/detail_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="32dp"
                     android:text="Titolo"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="26sp"
@@ -145,8 +156,7 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="8dp" />
+                    android:paddingVertical="8dp" />
 
             </LinearLayout>
 

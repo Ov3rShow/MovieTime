@@ -12,11 +12,9 @@ import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
-class DbSaver {
+public class DbSaver {
 
     static void DbSaving(Context context, List<Movie> movies, int page, boolean clearDb){
-
-        Log.w("PAGE, CLEAR ", page + " " + clearDb);
 
         if(clearDb)
             context.getContentResolver().delete(DbProvider.MOVIES_URI, MovieDbStrings.WATCH_LATER + " = 0", null);
@@ -62,5 +60,27 @@ class DbSaver {
         }
 
         return false;
+    }
+
+    public static void DbSavingSingle(Context context, Movie movie, boolean watchLater){
+
+        ContentValues cv = new ContentValues();
+        cv.put(MovieDbStrings._ID, movie.getId());
+        cv.put(MovieDbStrings.ORIGINAL_TITLE, movie.getOriginal_title().replace("'", ""));
+        cv.put(MovieDbStrings.OVERVIEW, movie.getOverview().replace("'", ""));
+        cv.put(MovieDbStrings.POSTER_PATH, movie.getPoster_path());
+        cv.put(MovieDbStrings.BACKDROP_PATH, movie.getBackdrop_path());
+        cv.put(MovieDbStrings.VOTE_AVERAGE, movie.getVote_average());
+        cv.put(MovieDbStrings.ADULT, movie.isAdult()? 1 : 0);
+        cv.put(MovieDbStrings.WATCH_LATER, watchLater? 1 : 0);
+
+        try
+        {
+            context.getContentResolver().insert(DbProvider.MOVIES_URI, cv);
+        }
+        catch (Exception ex)
+        {
+            Log.w("Errore", ex.getMessage());
+        }
     }
 }

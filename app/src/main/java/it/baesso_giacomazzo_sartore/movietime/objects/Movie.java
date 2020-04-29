@@ -9,6 +9,19 @@ public class Movie {
     private double vote_average;
     private boolean adult;
 
+    public Movie() {
+    }
+
+    public Movie(String id, String original_title, String overview, String poster_path, String backdrop_path, double vote_average, boolean adult) {
+        this.id = id;
+        this.original_title = original_title;
+        this.overview = overview;
+        this.poster_path = poster_path;
+        this.backdrop_path = backdrop_path;
+        this.vote_average = vote_average;
+        this.adult = adult;
+    }
+
     public String getId() {
         return id;
     }

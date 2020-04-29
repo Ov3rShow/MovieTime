@@ -25,7 +25,7 @@
         android:layout_height="32dp"
         android:layout_gravity="top|end"
         android:layout_margin="8dp"
-        android:src="@drawable/ic_watch_later_black_24dp"
+        android:src="@drawable/ic_watch_later_white_24dp"
         android:tint="@color/colorAccent"
         android:background="@drawable/circle_shape"
         android:padding="2dp"

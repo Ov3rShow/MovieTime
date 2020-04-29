@@ -2,29 +2,40 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.willy.ratingbar.ScaleRatingBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import it.baesso_giacomazzo_sartore.movietime.API.DbSaver;
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
 import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
+import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
@@ -35,12 +46,15 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
     ImageView imageView;
     TextView titleTxtView, overviewTxtView;
     ScaleRatingBar ratingBar;
-    ImageView ageLimit, backBtn;
+    ImageView ageLimit, backBtn, watchLaterBtn;
     View divider;
 
     RecyclerView recyclerView;
     RecyclerViewFilmsAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
+
+    boolean watchLater, isSavedOnDb;
+    Movie currentMovie;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -62,11 +76,19 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         ageLimit = findViewById(R.id.detail_ageLimitImg);
         divider = findViewById(R.id.detail_divider);
         backBtn = findViewById(R.id.detail_back);
+        watchLaterBtn = findViewById(R.id.detail_watchLater);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        watchLaterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setWatchLater();
             }
         });
 
@@ -80,12 +102,14 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
         if(getIntent().getExtras() != null)
         {
-            String movieId = getIntent().getExtras().getString(MovieDbStrings._ID);
+            currentMovie = new Movie(getIntent().getExtras().getString(MovieDbStrings._ID), getIntent().getExtras().getString(MovieDbStrings.ORIGINAL_TITLE),
+                    getIntent().getExtras().getString(MovieDbStrings.OVERVIEW), getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH),
+                    getIntent().getExtras().getString(MovieDbStrings.BACKDROP_PATH), getIntent().getExtras().getDouble(MovieDbStrings.VOTE_AVERAGE),
+                    getIntent().getExtras().getBoolean(MovieDbStrings.ADULT));
+
             String image = getIntent().getExtras().getString(MovieDbStrings.BACKDROP_PATH);
-            String title = getIntent().getExtras().getString(MovieDbStrings.ORIGINAL_TITLE);
-            String overview = getIntent().getExtras().getString(MovieDbStrings.OVERVIEW);
-            double rating = getIntent().getExtras().getDouble(MovieDbStrings.VOTE_AVERAGE);
-            boolean isAdult = getIntent().getExtras().getBoolean(MovieDbStrings.ADULT);
+
+            getCurrentWatchLaterStatus();
 
             int orientation = getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -107,22 +131,22 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
                         .error(getDrawable(R.drawable.error))
                         .into(imageView);
 
-            if(isAdult)
+            if(currentMovie.isAdult())
             {
                 divider.setVisibility(View.VISIBLE);
                 ageLimit.setVisibility(View.VISIBLE);
             }
 
 
-            if(overview == null || overview.equals(""))
+            if(currentMovie.getOverview() == null || currentMovie.getOverview().equals(""))
                 overviewTxtView.setText("La trama di questo film non è disponibile :(");
             else
-                overviewTxtView.setText(overview);
+                overviewTxtView.setText(currentMovie.getOverview());
 
-            titleTxtView.setText(title);
-            ratingBar.setRating((float)rating/2);
+            titleTxtView.setText(currentMovie.getOriginal_title());
+            ratingBar.setRating((float)currentMovie.getVote_average()/2);
 
-            WebService.getInstance().getSimilarMovies(DetailActivity.this, movieId, getString(R.string.api_key), "it-IT");
+            WebService.getInstance().getSimilarMovies(DetailActivity.this, currentMovie.getId(), getString(R.string.api_key), "it-IT");
         }
     }
 
@@ -148,5 +172,72 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         super.onResume();
         ScrollView scrollView = findViewById(R.id.detail_scrollView);
         scrollView.scrollTo(0, 0);
+    }
+
+    void setWatchLater()
+    {
+        watchLater = !watchLater;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieDbStrings.WATCH_LATER, watchLater? 1 : 0);
+        if(isSavedOnDb)
+        {
+            if(DetailActivity.this.getContentResolver().update(DbProvider.MOVIES_URI, contentValues , MovieDbStrings._ID + " = " + currentMovie.getId(), null) == 0)
+            {
+                showCustomSnackbar("Si è verificato un errore :(", R.drawable.ic_warning_black_24dp, R.color.red, R.color.white);
+            }
+        }
+        else
+            DbSaver.DbSavingSingle(DetailActivity.this, currentMovie, watchLater);
+
+        if(watchLater)
+        {
+            watchLaterBtn.setImageDrawable(getDrawable(R.drawable.custom_watch_later_yes));
+            showCustomSnackbar("Film aggiunto a guarda più tardi", R.drawable.ic_check_circle_black_24dp, R.color.green, R.color.white);
+        }
+        else
+        {
+            watchLaterBtn.setImageDrawable(getDrawable(R.drawable.custom_watch_later_no));
+            showCustomSnackbar("Film rimosso da guarda più tardi", R.drawable.ic_check_circle_black_24dp, R.color.red, R.color.white);
+        }
+
+    }
+
+    void getCurrentWatchLaterStatus() {
+
+        Cursor cursor = DetailActivity.this.getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings._ID + " = " + currentMovie.getId(), null, null, null);
+
+        if (cursor != null) {
+            if(cursor.getCount() > 0)
+            {
+                cursor.moveToFirst();
+                int watchLaterStatus = cursor.getInt(cursor.getColumnIndex(MovieDbStrings.WATCH_LATER));
+
+                watchLater = watchLaterStatus == 1;
+                isSavedOnDb = true;
+            }
+            else
+            {
+                watchLater = false;
+                isSavedOnDb = false;
+            }
+            cursor.close();
+        }
+
+        if(watchLater)
+            watchLaterBtn.setImageDrawable(getDrawable(R.drawable.custom_watch_later_yes));
+    }
+
+    void showCustomSnackbar(String text, int icon, int backgroundColor, int textIconColor) {
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG);
+        View snackbarLayout = snackbar.getView();
+        TextView textView = snackbarLayout.findViewById(com.google.android.material.R.id.snackbar_text);
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
+        textView.setCompoundDrawablePadding(16);
+        snackbar.setBackgroundTint(getColor(backgroundColor));
+        snackbar.setTextColor(getColor(textIconColor));
+
+        snackbar.show();
     }
 }

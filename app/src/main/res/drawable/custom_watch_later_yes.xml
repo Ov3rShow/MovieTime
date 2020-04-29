@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="oval">
+
+            <solid
+                android:color="@color/colorPrimaryDakrer"/>
+
+            <size
+                android:width="56dp"
+                android:height="56dp"/>
+        </shape>
+    </item>
+
+    <item
+        android:width="40dp"
+        android:height="40dp"
+        android:drawable="@drawable/ic_watch_later_yellow_24dp"
+        android:gravity="center"/>
+
+</layer-list>
