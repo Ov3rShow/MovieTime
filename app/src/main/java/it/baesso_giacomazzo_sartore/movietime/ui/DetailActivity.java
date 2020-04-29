@@ -2,6 +2,9 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -19,8 +22,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.willy.ratingbar.ScaleRatingBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 
@@ -31,6 +38,10 @@ public class DetailActivity extends AppCompatActivity {
     ScaleRatingBar ratingBar;
     ImageView ageLimit;
     View divider;
+
+    RecyclerView recyclerView;
+    RecyclerViewFilmSmallAdapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -50,6 +61,22 @@ public class DetailActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.detail_rating);
         ageLimit = findViewById(R.id.detail_ageLimitImg);
         divider = findViewById(R.id.detail_divider);
+
+        recyclerView = findViewById(R.id.detail_recyclerView);
+        mLayoutManager  = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        List<Movie> list = new ArrayList<>();
+
+        Movie m1 = new Movie();
+        m1.setOriginal_title("Film prova");
+
+        list.add(m1);
+        list.add(m1);
+        list.add(m1);
+
+        mAdapter = new RecyclerViewFilmSmallAdapter(list, this);
+        recyclerView.setAdapter(mAdapter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             overviewTxtView.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
