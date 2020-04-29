@@ -5,15 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.PrefsManager;

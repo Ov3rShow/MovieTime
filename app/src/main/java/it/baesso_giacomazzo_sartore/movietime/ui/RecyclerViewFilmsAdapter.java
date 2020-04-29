@@ -33,11 +33,13 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
 
     private List<Movie> movies;
     private Context context;
+    private int layout;
 
-    RecyclerViewFilmsAdapter(List<Movie> movies, Context context)
+    RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout)
     {
         this.movies = movies;
         this.context = context;
+        this.layout = layout;
     }
 
     List<Movie> getMovies()
@@ -59,7 +61,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View cellView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_layout, parent, false);
+        View cellView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
 
         return new MyViewHolder(cellView);
     }
@@ -105,6 +107,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString(MovieDbStrings._ID, movies.get(position).getId());
                 bundle.putString(MovieDbStrings.ORIGINAL_TITLE, movies.get(position).getOriginal_title());
                 bundle.putString(MovieDbStrings.OVERVIEW, movies.get(position).getOverview());
                 bundle.putString(MovieDbStrings.BACKDROP_PATH, movies.get(position).getBackdrop_path());

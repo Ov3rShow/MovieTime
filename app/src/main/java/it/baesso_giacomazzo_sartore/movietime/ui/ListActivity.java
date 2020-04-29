@@ -285,7 +285,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         } else
             filteredList.addAll(list);
 
-        mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this);
+        mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this, R.layout.cell_layout);
         recyclerView.setAdapter(mAdapter);
         //controlli se la lista è già stata ordinata e in caso la ordini
         mAdapter.notifyDataSetChanged();

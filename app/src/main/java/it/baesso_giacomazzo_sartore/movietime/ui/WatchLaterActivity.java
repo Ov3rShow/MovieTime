@@ -85,7 +85,7 @@ public class WatchLaterActivity extends AppCompatActivity implements ListActivit
             }
             movies.close();
 
-            mAdapter = new RecyclerViewFilmsAdapter(moviesList, WatchLaterActivity.this);
+            mAdapter = new RecyclerViewFilmsAdapter(moviesList, WatchLaterActivity.this, R.layout.cell_layout);
             recyclerView.setAdapter(mAdapter);
             //controlli se la lista è già stata ordinata e in caso la ordini
             mAdapter.notifyDataSetChanged();

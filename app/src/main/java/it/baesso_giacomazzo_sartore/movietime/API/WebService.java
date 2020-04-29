@@ -1,13 +1,12 @@
 package it.baesso_giacomazzo_sartore.movietime.API;
 
 import android.content.Context;
-import android.graphics.Movie;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 import retrofit2.Call;
@@ -56,6 +55,29 @@ public class WebService {
                     if((clearDb /*&& DbSaver.dbSaveTimeCheck(context)*/) || page > 1)
                         DbSaver.DbSaving(context, response.body().getResults(), page, clearDb);
                 }
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call<PopularResult> call, Throwable t) {
+                Log.e("Filtro ", t.getMessage());
+            }
+        });
+    }
+
+    public void getSimilarMovies(final Context context, String movieId, String key, String localization){
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("api_key", key);
+        parameters.put("language", localization);
+
+        todoService.getSimilarMovies(movieId, parameters).enqueue(new Callback<PopularResult>() {
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call<PopularResult> call, Response<PopularResult> response) {
+
+                if(context instanceof DetailActivityInterface && response.body() != null)
+                    ((DetailActivityInterface)context).showSimilarMovies(response.body().getResults());
             }
 
             @Override

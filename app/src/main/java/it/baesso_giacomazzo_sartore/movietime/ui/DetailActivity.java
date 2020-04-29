@@ -2,20 +2,17 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,22 +22,24 @@ import com.willy.ratingbar.ScaleRatingBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.baesso_giacomazzo_sartore.movietime.API.WebService;
+import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements DetailActivityInterface {
 
     ImageView imageView;
     TextView titleTxtView, overviewTxtView;
     ScaleRatingBar ratingBar;
-    ImageView ageLimit;
+    ImageView ageLimit, backBtn;
     View divider;
 
     RecyclerView recyclerView;
-    RecyclerViewFilmSmallAdapter mAdapter;
+    RecyclerViewFilmsAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -51,8 +50,9 @@ public class DetailActivity extends AppCompatActivity {
 
         if(getSupportActionBar() != null)
         {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setSubtitle("Dettagli film");
+            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setSubtitle("Dettagli film");
+            getSupportActionBar().hide();
         }
 
         imageView = findViewById(R.id.detail_img);
@@ -61,22 +61,18 @@ public class DetailActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.detail_rating);
         ageLimit = findViewById(R.id.detail_ageLimitImg);
         divider = findViewById(R.id.detail_divider);
+        backBtn = findViewById(R.id.detail_back);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         recyclerView = findViewById(R.id.detail_recyclerView);
         mLayoutManager  = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
-
-        List<Movie> list = new ArrayList<>();
-
-        Movie m1 = new Movie();
-        m1.setOriginal_title("Film prova");
-
-        list.add(m1);
-        list.add(m1);
-        list.add(m1);
-
-        mAdapter = new RecyclerViewFilmSmallAdapter(list, this);
-        recyclerView.setAdapter(mAdapter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             overviewTxtView.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
@@ -84,6 +80,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null)
         {
+            String movieId = getIntent().getExtras().getString(MovieDbStrings._ID);
             String image = getIntent().getExtras().getString(MovieDbStrings.BACKDROP_PATH);
             String title = getIntent().getExtras().getString(MovieDbStrings.ORIGINAL_TITLE);
             String overview = getIntent().getExtras().getString(MovieDbStrings.OVERVIEW);
@@ -124,6 +121,8 @@ public class DetailActivity extends AppCompatActivity {
 
             titleTxtView.setText(title);
             ratingBar.setRating((float)rating/2);
+
+            WebService.getInstance().getSimilarMovies(DetailActivity.this, movieId, getString(R.string.api_key), "it-IT");
         }
     }
 
@@ -135,5 +134,19 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showSimilarMovies(List<Movie> movies) {
+        mAdapter = new RecyclerViewFilmsAdapter(movies, DetailActivity.this, R.layout.cell_layout_small);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ScrollView scrollView = findViewById(R.id.detail_scrollView);
+        scrollView.scrollTo(0, 0);
     }
 }
