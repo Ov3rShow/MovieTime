@@ -23,6 +23,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.willy.ratingbar.ScaleRatingBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.API.DbSaver;
@@ -38,7 +41,7 @@ import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 public class DetailActivity extends AppCompatActivity implements DetailActivityInterface {
 
     ImageView imageView;
-    TextView titleTxtView, overviewTxtView;
+    TextView titleTxtView, overviewTxtView, dateTextView, noSimilar;
     ScaleRatingBar ratingBar;
     ImageView ageLimit, backBtn, watchLaterBtn;
     View divider;
@@ -65,6 +68,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
         imageView = findViewById(R.id.detail_img);
         titleTxtView = findViewById(R.id.detail_title);
+        dateTextView = findViewById(R.id.detail_date);
+        noSimilar = findViewById(R.id.detail_noSimilar);
         overviewTxtView = findViewById(R.id.detail_overview);
         ratingBar = findViewById(R.id.detail_rating);
         ageLimit = findViewById(R.id.detail_ageLimitImg);
@@ -97,7 +102,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         if(getIntent().getExtras() != null)
         {
             currentMovie = new Movie(getIntent().getExtras().getString(MovieDbStrings._ID), getIntent().getExtras().getString(MovieDbStrings.TITLE),
-                    getIntent().getExtras().getString(MovieDbStrings.OVERVIEW), getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH),
+                    getIntent().getExtras().getString(MovieDbStrings.OVERVIEW),getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH),getIntent().getExtras().getString(MovieDbStrings.DATE) ,
                     getIntent().getExtras().getString(MovieDbStrings.BACKDROP_PATH), getIntent().getExtras().getDouble(MovieDbStrings.VOTE_AVERAGE),
                     getIntent().getExtras().getBoolean(MovieDbStrings.ADULT));
 
@@ -140,6 +145,15 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
             titleTxtView.setText(currentMovie.getTitle());
             ratingBar.setRating((float)currentMovie.getVote_average()/2);
 
+            String data = currentMovie.getRelease_date();
+            try {
+                Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(data);
+                data = new SimpleDateFormat("dd/MM/yyyy").format(date1);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            dateTextView.setText(data);
+
             WebService.getInstance().getSimilarMovies(DetailActivity.this, currentMovie.getId(), getString(R.string.api_key), "it-IT");
         }
     }
@@ -156,9 +170,15 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
     @Override
     public void showSimilarMovies(List<Movie> movies) {
-        mAdapter = new RecyclerViewFilmsAdapter(movies, DetailActivity.this, R.layout.cell_layout_small);
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        if(movies.size() == 0){
+            noSimilar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else{
+            mAdapter = new RecyclerViewFilmsAdapter(movies, DetailActivity.this, R.layout.cell_layout_small);
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

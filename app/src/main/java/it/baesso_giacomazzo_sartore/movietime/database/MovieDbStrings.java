@@ -7,8 +7,9 @@ public class MovieDbStrings {
      @SerializedName("id")
      public static final String _ID = "_id";
      public static final String TABLE_NAME = "movie";
-     public static final String TITLE = "title";      //title
+     public static final String TITLE = "title";                        //title
      public static final String OVERVIEW = "overview";                  //trama
+     public static final String DATE = "date";                          //data di rilascio
      public static final String POSTER_PATH = "poster_path";            //immagine lista
      public static final String BACKDROP_PATH = "backdrop_path";        //immagine dettaglio
      public static final String VOTE_AVERAGE = "vote_average";          //voto
@@ -19,6 +20,7 @@ public class MovieDbStrings {
              + " integer primary key, "
              + TITLE + " text, "
              + OVERVIEW + " text, "
+             + DATE + " text, "
              + POSTER_PATH + " text, "
              + BACKDROP_PATH + " text, "
              + VOTE_AVERAGE + " REAL, "

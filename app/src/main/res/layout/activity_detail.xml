@@ -124,6 +124,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
+                android:text="Data di uscita"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="20sp"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/detail_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="2019-01-20"
+                android:textSize="18sp"
+                android:textColor="@color/hint"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 android:text="Trama"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textSize="20sp"
@@ -156,6 +175,16 @@
                 android:orientation="horizontal"
                 android:paddingVertical="8dp"
                 android:clipChildren="false"/>
+
+            <TextView
+                android:id="@+id/detail_noSimilar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Film simili non disponibili ☹"
+                android:textSize="18sp"
+                android:textColor="@color/hint"
+                android:visibility="gone"/>
 
 
         </LinearLayout>

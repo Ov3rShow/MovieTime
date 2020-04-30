@@ -103,6 +103,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
                 bundle.putString(MovieDbStrings._ID, movies.get(position).getId());
                 bundle.putString(MovieDbStrings.TITLE, movies.get(position).getTitle());
                 bundle.putString(MovieDbStrings.OVERVIEW, movies.get(position).getOverview());
+                bundle.putString(MovieDbStrings.DATE, movies.get(position).getRelease_date());
                 bundle.putString(MovieDbStrings.BACKDROP_PATH, movies.get(position).getBackdrop_path());
                 bundle.putString(MovieDbStrings.POSTER_PATH, movies.get(position).getPoster_path());
                 bundle.putDouble(MovieDbStrings.VOTE_AVERAGE, movies.get(position).getVote_average());

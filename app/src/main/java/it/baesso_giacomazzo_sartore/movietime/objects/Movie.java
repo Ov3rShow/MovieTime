@@ -5,6 +5,7 @@ public class Movie {
     private String title;
     private String overview;
     private String poster_path;
+    private String release_date;
     private String backdrop_path;
     private double vote_average;
     private boolean adult;
@@ -12,11 +13,12 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String id, String title, String overview, String poster_path, String backdrop_path, double vote_average, boolean adult) {
+    public Movie(String id, String title, String overview, String poster_path, String release_date, String backdrop_path, double vote_average, boolean adult) {
         this.id = id;
         this.title = title;
         this.overview = overview;
         this.poster_path = poster_path;
+        this.release_date = release_date;
         this.backdrop_path = backdrop_path;
         this.vote_average = vote_average;
         this.adult = adult;
@@ -76,5 +78,13 @@ public class Movie {
 
     public void setAdult(boolean adult) {
         this.adult = adult;
+    }
+
+    public String getRelease_date() {
+        return release_date;
+    }
+
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
     }
 }
