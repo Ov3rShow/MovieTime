@@ -1,7 +1,5 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
-import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -100,7 +98,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         }
 
 
-        textView.setText(movies.get(position).getOriginal_title());
+        textView.setText(movies.get(position).getTitle());
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +106,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
                 Intent intent = new Intent(context, DetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(MovieDbStrings._ID, movies.get(position).getId());
-                bundle.putString(MovieDbStrings.ORIGINAL_TITLE, movies.get(position).getOriginal_title());
+                bundle.putString(MovieDbStrings.TITLE, movies.get(position).getTitle());
                 bundle.putString(MovieDbStrings.OVERVIEW, movies.get(position).getOverview());
                 bundle.putString(MovieDbStrings.BACKDROP_PATH, movies.get(position).getBackdrop_path());
                 bundle.putString(MovieDbStrings.POSTER_PATH, movies.get(position).getPoster_path());
@@ -122,7 +120,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                LongPressDialog dialog = new LongPressDialog(movies.get(position).getOriginal_title(), movies.get(position).getId(), watchLaterImg);
+                LongPressDialog dialog = new LongPressDialog(movies.get(position).getTitle(), movies.get(position).getId(), watchLaterImg);
                 dialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "TAG_PREFERITI");
                 return false;
             }
@@ -148,8 +146,8 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         Collections.sort(movies, new Comparator<Movie>() {
             @Override
             public int compare(Movie movie1, Movie movie2) {
-                String s1 = movie1.getOriginal_title();
-                String s2 = movie2.getOriginal_title();
+                String s1 = movie1.getTitle();
+                String s2 = movie2.getTitle();
                 return s1.compareToIgnoreCase(s2);
             }
         });

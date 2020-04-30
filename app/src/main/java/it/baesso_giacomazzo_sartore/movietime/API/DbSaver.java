@@ -23,7 +23,7 @@ public class DbSaver {
         {
             ContentValues cv = new ContentValues();
             cv.put(MovieDbStrings._ID, movie.getId());
-            cv.put(MovieDbStrings.ORIGINAL_TITLE, movie.getOriginal_title().replace("'", ""));
+            cv.put(MovieDbStrings.TITLE, movie.getTitle().replace("'", ""));
             cv.put(MovieDbStrings.OVERVIEW, movie.getOverview().replace("'", ""));
             cv.put(MovieDbStrings.POSTER_PATH, movie.getPoster_path());
             cv.put(MovieDbStrings.BACKDROP_PATH, movie.getBackdrop_path());
@@ -66,7 +66,7 @@ public class DbSaver {
 
         ContentValues cv = new ContentValues();
         cv.put(MovieDbStrings._ID, movie.getId());
-        cv.put(MovieDbStrings.ORIGINAL_TITLE, movie.getOriginal_title().replace("'", ""));
+        cv.put(MovieDbStrings.TITLE, movie.getTitle().replace("'", ""));
         cv.put(MovieDbStrings.OVERVIEW, movie.getOverview().replace("'", ""));
         cv.put(MovieDbStrings.POSTER_PATH, movie.getPoster_path());
         cv.put(MovieDbStrings.BACKDROP_PATH, movie.getBackdrop_path());

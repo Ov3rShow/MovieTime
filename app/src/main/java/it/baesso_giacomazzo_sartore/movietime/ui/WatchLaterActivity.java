@@ -73,7 +73,7 @@ public class WatchLaterActivity extends AppCompatActivity implements ListActivit
                 while (movies.moveToNext()) {
                     Movie movie = new Movie();
                     movie.setId(movies.getString(movies.getColumnIndex(MovieDbStrings._ID)));
-                    movie.setOriginal_title(movies.getString(movies.getColumnIndex(MovieDbStrings.ORIGINAL_TITLE)));
+                    movie.setTitle(movies.getString(movies.getColumnIndex(MovieDbStrings.TITLE)));
                     movie.setOverview(movies.getString(movies.getColumnIndex(MovieDbStrings.OVERVIEW)));
                     movie.setPoster_path(movies.getString(movies.getColumnIndex(MovieDbStrings.POSTER_PATH)));
                     movie.setBackdrop_path(movies.getString(movies.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));

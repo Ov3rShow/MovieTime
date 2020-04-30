@@ -2,7 +2,7 @@ package it.baesso_giacomazzo_sartore.movietime.objects;
 
 public class Movie {
     private String id;
-    private String original_title;
+    private String title;
     private String overview;
     private String poster_path;
     private String backdrop_path;
@@ -12,9 +12,9 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String id, String original_title, String overview, String poster_path, String backdrop_path, double vote_average, boolean adult) {
+    public Movie(String id, String title, String overview, String poster_path, String backdrop_path, double vote_average, boolean adult) {
         this.id = id;
-        this.original_title = original_title;
+        this.title = title;
         this.overview = overview;
         this.poster_path = poster_path;
         this.backdrop_path = backdrop_path;
@@ -30,12 +30,12 @@ public class Movie {
         this.id = id;
     }
 
-    public String getOriginal_title() {
-        return original_title;
+    public String getTitle() {
+        return title;
     }
 
-    public void setOriginal_title(String original_title) {
-        this.original_title = original_title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getOverview() {

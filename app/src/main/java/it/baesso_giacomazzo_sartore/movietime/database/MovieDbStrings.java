@@ -1,7 +1,5 @@
 package it.baesso_giacomazzo_sartore.movietime.database;
 
-import android.provider.BaseColumns;
-
 import com.google.gson.annotations.SerializedName;
 
 public class MovieDbStrings {
@@ -9,7 +7,7 @@ public class MovieDbStrings {
      @SerializedName("id")
      public static final String _ID = "_id";
      public static final String TABLE_NAME = "movie";
-     public static final String ORIGINAL_TITLE = "original_title";      //title
+     public static final String TITLE = "title";      //title
      public static final String OVERVIEW = "overview";                  //trama
      public static final String POSTER_PATH = "poster_path";            //immagine lista
      public static final String BACKDROP_PATH = "backdrop_path";        //immagine dettaglio
@@ -19,7 +17,7 @@ public class MovieDbStrings {
 
      public static final String CREATE_TABLE = "create table movie (" + _ID
              + " integer primary key, "
-             + ORIGINAL_TITLE + " text, "
+             + TITLE + " text, "
              + OVERVIEW + " text, "
              + POSTER_PATH + " text, "
              + BACKDROP_PATH + " text, "

@@ -140,7 +140,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
                 List<Movie> movieSearched = new ArrayList<>();
 
-                Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.ORIGINAL_TITLE + " LIKE '%" + charSequence + "%'", null, null);
+                Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.TITLE + " LIKE '%" + charSequence + "%'", null, null);
 
                 if(movieCursor == null)
                     return;
@@ -149,7 +149,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
                    Movie movie = new Movie();
                    movie.setId(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings._ID)));
-                   movie.setOriginal_title(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.ORIGINAL_TITLE)));
+                   movie.setTitle(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.TITLE)));
                    movie.setOverview(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.OVERVIEW)));
                    movie.setPoster_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.POSTER_PATH)));
                    movie.setBackdrop_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));
@@ -221,7 +221,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
             while (movies.moveToNext()) {
                 Movie movie = new Movie();
                 movie.setId(movies.getString(movies.getColumnIndex(MovieDbStrings._ID)));
-                movie.setOriginal_title(movies.getString(movies.getColumnIndex(MovieDbStrings.ORIGINAL_TITLE)));
+                movie.setTitle(movies.getString(movies.getColumnIndex(MovieDbStrings.TITLE)));
                 movie.setOverview(movies.getString(movies.getColumnIndex(MovieDbStrings.OVERVIEW)));
                 movie.setPoster_path(movies.getString(movies.getColumnIndex(MovieDbStrings.POSTER_PATH)));
                 movie.setBackdrop_path(movies.getString(movies.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));

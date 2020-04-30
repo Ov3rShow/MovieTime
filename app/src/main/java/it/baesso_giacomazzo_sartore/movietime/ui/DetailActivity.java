@@ -2,27 +2,21 @@ package it.baesso_giacomazzo_sartore.movietime.ui;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -102,7 +96,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
         if(getIntent().getExtras() != null)
         {
-            currentMovie = new Movie(getIntent().getExtras().getString(MovieDbStrings._ID), getIntent().getExtras().getString(MovieDbStrings.ORIGINAL_TITLE),
+            currentMovie = new Movie(getIntent().getExtras().getString(MovieDbStrings._ID), getIntent().getExtras().getString(MovieDbStrings.TITLE),
                     getIntent().getExtras().getString(MovieDbStrings.OVERVIEW), getIntent().getExtras().getString(MovieDbStrings.POSTER_PATH),
                     getIntent().getExtras().getString(MovieDbStrings.BACKDROP_PATH), getIntent().getExtras().getDouble(MovieDbStrings.VOTE_AVERAGE),
                     getIntent().getExtras().getBoolean(MovieDbStrings.ADULT));
@@ -139,11 +133,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
 
             if(currentMovie.getOverview() == null || currentMovie.getOverview().equals(""))
-                overviewTxtView.setText("La trama di questo film non è disponibile :(");
+                overviewTxtView.setText("Trama non disponibile ☹️");
             else
                 overviewTxtView.setText(currentMovie.getOverview());
 
-            titleTxtView.setText(currentMovie.getOriginal_title());
+            titleTxtView.setText(currentMovie.getTitle());
             ratingBar.setRating((float)currentMovie.getVote_average()/2);
 
             WebService.getInstance().getSimilarMovies(DetailActivity.this, currentMovie.getId(), getString(R.string.api_key), "it-IT");
