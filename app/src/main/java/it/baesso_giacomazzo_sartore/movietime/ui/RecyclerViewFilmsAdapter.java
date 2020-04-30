@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,23 +35,19 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
     private Context context;
     private int layout;
 
-    RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout)
-    {
+    RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout) {
         this.movies = movies;
         this.context = context;
         this.layout = layout;
     }
 
-    List<Movie> getMovies()
-    {
+    List<Movie> getMovies() {
         return movies;
     }
 
-    boolean checkIfExists(String id)
-    {
-        for (Movie m : movies)
-        {
-            if(m.getId().equals(id))
+    boolean checkIfExists(String id) {
+        for (Movie m : movies) {
+            if (m.getId().equals(id))
                 return true;
         }
 
@@ -71,12 +69,10 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         final CardView cardView = holder.cellView.findViewById(R.id.cell_cardView);
         final ImageView watchLaterImg = holder.cellView.findViewById(R.id.cell_watchLater);
 
-        if(movies.get(position).getPoster_path() == null)
-        {
+        if (movies.get(position).getPoster_path() == null) {
             imageView.setImageDrawable(context.getDrawable(R.drawable.error));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        }
-        else
+        } else
             Glide.with(context)
                     .load("https://image.tmdb.org/t/p/w500".concat(movies.get(position).getPoster_path()))
                     .apply(new RequestOptions().centerCrop())
@@ -84,12 +80,11 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
                     .error(context.getDrawable(R.drawable.error))
                     .into(imageView);
 
-        Cursor cursor = context.getContentResolver().query(DbProvider.MOVIES_URI, new String[]{MovieDbStrings.WATCH_LATER}, MovieDbStrings._ID + " = " + movies.get(position).getId(),null,null);
-        if(cursor != null)
-        {
+        Cursor cursor = context.getContentResolver().query(DbProvider.MOVIES_URI, new String[]{MovieDbStrings.WATCH_LATER}, MovieDbStrings._ID + " = " + movies.get(position).getId(), null, null);
+        if (cursor != null) {
             cursor.moveToFirst();
 
-            if(cursor.getCount() > 0 && cursor.getInt(cursor.getColumnIndex(MovieDbStrings.WATCH_LATER)) == 1)
+            if (cursor.getCount() > 0 && cursor.getInt(cursor.getColumnIndex(MovieDbStrings.WATCH_LATER)) == 1)
                 watchLaterImg.setVisibility(View.VISIBLE);
             else
                 watchLaterImg.setVisibility(View.INVISIBLE);
@@ -121,7 +116,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
             @Override
             public boolean onLongClick(View view) {
                 LongPressDialog dialog = new LongPressDialog(movies.get(position).getTitle(), movies.get(position).getId(), watchLaterImg);
-                dialog.show(((AppCompatActivity)context).getSupportFragmentManager(), "TAG_PREFERITI");
+                dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "TAG_PREFERITI");
                 return false;
             }
         });
@@ -132,8 +127,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         return movies.size();
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         View cellView;
 
         MyViewHolder(@NonNull View cellView) {
