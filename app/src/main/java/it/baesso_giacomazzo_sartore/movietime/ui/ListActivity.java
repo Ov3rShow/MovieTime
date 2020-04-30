@@ -59,6 +59,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     boolean activityStartedOffline = false;
 
     final int WATCH_LATER_ACTIVITY_CODE = 1;
+    final int DETAIL_ACTIVITY_CODE = 2;
 
     //enum per gestire se la lista è ordinata
 
@@ -340,7 +341,9 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == WATCH_LATER_ACTIVITY_CODE)
-            prepareOfflineList();
+        if(requestCode == WATCH_LATER_ACTIVITY_CODE || requestCode == DETAIL_ACTIVITY_CODE)
+        {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

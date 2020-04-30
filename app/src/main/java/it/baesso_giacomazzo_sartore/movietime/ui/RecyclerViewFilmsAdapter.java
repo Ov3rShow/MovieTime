@@ -1,5 +1,6 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -53,6 +54,14 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
 
         return false;
     }
+
+    /*void setWatchLater(String movieId)
+    {
+        for(int i = 0; i < movies.size(); i++)
+        {
+            movies.get(i).set
+        }
+    }*/
 
     @NonNull
     @Override
@@ -108,7 +117,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
                 bundle.putDouble(MovieDbStrings.VOTE_AVERAGE, movies.get(position).getVote_average());
                 bundle.putBoolean(MovieDbStrings.ADULT, movies.get(position).isAdult());
                 intent.putExtras(bundle);
-                context.startActivity(intent);
+                ((Activity)context).startActivityForResult(intent, 2);
             }
         });
 
