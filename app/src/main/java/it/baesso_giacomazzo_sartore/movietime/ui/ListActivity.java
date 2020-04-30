@@ -59,6 +59,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     boolean activityStartedOffline = false;
 
     final int WATCH_LATER_ACTIVITY_CODE = 1;
+    final int DETAIL_ACTIVITY_CODE = 2;
 
     //enum per gestire se la lista è ordinata
 
@@ -133,34 +134,41 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 //se entra in textchanged senza che nessun carattere sia cambiato esco dal metodo
                 if(charSequence.toString().equals("") && i2 == 0 && i1 == 0)
                     return;
 
                 List<Movie> movieSearched = new ArrayList<>();
 
-                Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.TITLE + " LIKE '%" + charSequence + "%'", null, null);
+                if(isNetworkAvailable())
+                {
+                    WebService webService = WebService.getInstance();
+                    webService.searchMovie(ListActivity.this, "it-IT", nextPageToDownload, searchBar.getText(), getString(R.string.api_key));
+                }else{
+                    Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.TITLE + " LIKE '%" + charSequence + "%'", null, null);
 
-                if(movieCursor == null)
-                    return;
+                    if(movieCursor == null)
+                        return;
 
-               while(movieCursor.moveToNext()){
+                    while(movieCursor.moveToNext()){
 
-                   Movie movie = new Movie();
-                   movie.setId(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings._ID)));
-                   movie.setTitle(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.TITLE)));
-                   movie.setOverview(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.OVERVIEW)));
-                   movie.setPoster_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.POSTER_PATH)));
-                   movie.setBackdrop_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));
-                   movie.setVote_average(movieCursor.getDouble(movieCursor.getColumnIndex(MovieDbStrings.VOTE_AVERAGE)));
-                   movie.setAdult(movieCursor.getInt(movieCursor.getColumnIndex(MovieDbStrings.ADULT)) == 1);
-                   movieSearched.add(movie);
-               }
+                        Movie movie = new Movie();
+                        movie.setId(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings._ID)));
+                        movie.setTitle(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.TITLE)));
+                        movie.setOverview(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.OVERVIEW)));
+                        movie.setPoster_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.POSTER_PATH)));
+                        movie.setBackdrop_path(movieCursor.getString(movieCursor.getColumnIndex(MovieDbStrings.BACKDROP_PATH)));
+                        movie.setVote_average(movieCursor.getDouble(movieCursor.getColumnIndex(MovieDbStrings.VOTE_AVERAGE)));
+                        movie.setAdult(movieCursor.getInt(movieCursor.getColumnIndex(MovieDbStrings.ADULT)) == 1);
+                        movieSearched.add(movie);
+                    }
 
-                movieCursor.close();
+                    movieCursor.close();
 
-                showList(movieSearched);
+                    showList(movieSearched);
+
+                }
+
             }
 
             @Override
@@ -288,7 +296,6 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
         mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this, R.layout.cell_layout);
         recyclerView.setAdapter(mAdapter);
         //controlli se la lista è già stata ordinata e in caso la ordini
-        mAdapter.notifyDataSetChanged();
     }
 
     private boolean isNetworkAvailable() {
@@ -340,7 +347,10 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == WATCH_LATER_ACTIVITY_CODE)
-            prepareOfflineList();
+        if(requestCode == WATCH_LATER_ACTIVITY_CODE || requestCode == DETAIL_ACTIVITY_CODE)
+        {
+            mAdapter.notifyDataSetChanged();
+        }
     }
+
 }

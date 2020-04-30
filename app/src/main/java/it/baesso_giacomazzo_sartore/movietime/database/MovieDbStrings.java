@@ -1,5 +1,7 @@
 package it.baesso_giacomazzo_sartore.movietime.database;
 
+import android.provider.BaseColumns;
+
 import com.google.gson.annotations.SerializedName;
 
 public class MovieDbStrings {
@@ -16,8 +18,9 @@ public class MovieDbStrings {
      public static final String ADULT = "adult";                        //film categorizzato come per "adulti" 0/1
      public static final String WATCH_LATER = "watchLater";             //contrassegnato come da vedere 0 no, 1 si
 
-     public static final String CREATE_TABLE = "create table movie (" + _ID
-             + " integer primary key, "
+     public static final String CREATE_TABLE = "create table movie ("
+             + "internal_id integer primary key, "
+             + _ID + " integer unique, "
              + TITLE + " text, "
              + OVERVIEW + " text, "
              + DATE + " text, "
