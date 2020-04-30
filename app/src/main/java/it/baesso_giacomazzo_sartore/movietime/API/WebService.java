@@ -9,6 +9,7 @@ import java.util.Map;
 import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
+import it.baesso_giacomazzo_sartore.movietime.objects.SearchResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +64,7 @@ public class WebService {
                 Log.e("Filtro ", t.getMessage());
             }
         });
+
     }
 
     public void getSimilarMovies(final Context context, String movieId, String key, String localization){
@@ -83,6 +85,27 @@ public class WebService {
             @Override
             @EverythingIsNonNull
             public void onFailure(Call<PopularResult> call, Throwable t) {
+                Log.e("Filtro ", t.getMessage());
+            }
+        });
+    }
+
+    public void searchMovie(final Context context, String localization, final int page, String query, String key){
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("api_key", key);
+        parameters.put("language", localization);
+        parameters.put("page", String.valueOf(page));
+        parameters.put("query", String.valueOf(query));
+
+        todoService.searchMovie(parameters).enqueue(new Callback<SearchResult>() {
+            @Override
+            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                if(context instanceof DetailActivityInterface && response.body() != null)
+                    ((DetailActivityInterface)context).showSimilarMovies(response.body().getResults());
+            }
+
+            @Override
+            public void onFailure(Call<SearchResult> call, Throwable t) {
                 Log.e("Filtro ", t.getMessage());
             }
         });
