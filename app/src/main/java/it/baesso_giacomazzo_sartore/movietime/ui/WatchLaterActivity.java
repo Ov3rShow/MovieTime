@@ -19,14 +19,13 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
-import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 
-public class WatchLaterActivity extends AppCompatActivity implements ListActivityInterface {
+public class WatchLaterActivity extends AppCompatActivity implements ActivityInterface {
 
     RecyclerView recyclerView;
     RecyclerViewFilmsAdapter mAdapter;
@@ -111,7 +110,7 @@ public class WatchLaterActivity extends AppCompatActivity implements ListActivit
     }
 
     @Override
-    public void showApiCallResult(PopularResult result) {
+    public void showApiCallResult(List<Movie> result) {
 
     }
 
@@ -123,6 +122,11 @@ public class WatchLaterActivity extends AppCompatActivity implements ListActivit
     @Override
     public void refreshList() {
         showMovies();
+    }
+
+    @Override
+    public void showSearchResult(List<Movie> movies) {
+
     }
 
     void showCustomSnackbar(String text, int icon, int backgroundColor, int textIconColor) {

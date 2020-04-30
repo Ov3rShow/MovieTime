@@ -6,8 +6,7 @@ public class SearchResult {
     private int page;
     private int total_results;
     private int total_pages;
-    private String query;
-    List<Movie> results;
+    private List<Movie> results;
 
     public int getPage() {
         return page;
@@ -33,13 +32,6 @@ public class SearchResult {
         this.total_pages = total_pages;
     }
 
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
-    }
     public List<Movie> getResults() {
         return results;
     }

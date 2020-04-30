@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,6 +34,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
     private List<Movie> movies;
     private Context context;
     private int layout;
+    private boolean isSavedOnDb = false;
 
     RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout) {
         this.movies = movies;
@@ -54,14 +54,6 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
 
         return false;
     }
-
-    /*void setWatchLater(String movieId)
-    {
-        for(int i = 0; i < movies.size(); i++)
-        {
-            movies.get(i).set
-        }
-    }*/
 
     @NonNull
     @Override
@@ -92,6 +84,9 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         Cursor cursor = context.getContentResolver().query(DbProvider.MOVIES_URI, new String[]{MovieDbStrings.WATCH_LATER}, MovieDbStrings._ID + " = " + movies.get(position).getId(), null, null);
         if (cursor != null) {
             cursor.moveToFirst();
+
+            if(cursor.getCount() > 0)
+                isSavedOnDb = true;
 
             if (cursor.getCount() > 0 && cursor.getInt(cursor.getColumnIndex(MovieDbStrings.WATCH_LATER)) == 1)
                 watchLaterImg.setVisibility(View.VISIBLE);
@@ -125,7 +120,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                LongPressDialog dialog = new LongPressDialog(movies.get(position).getTitle(), movies.get(position).getId(), watchLaterImg);
+                LongPressDialog dialog = new LongPressDialog(movies.get(position), watchLaterImg, isSavedOnDb);
                 dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "TAG_PREFERITI");
                 return false;
             }

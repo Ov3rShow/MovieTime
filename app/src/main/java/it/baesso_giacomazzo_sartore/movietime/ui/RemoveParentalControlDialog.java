@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.Security;
@@ -46,10 +46,10 @@ public class RemoveParentalControlDialog extends DialogFragment {
                 {
                     PrefsManager.getInstance(context).setPreference(getString(R.string.pref_parental_control_enabled), false);
 
-                    if(context instanceof ListActivityInterface)
+                    if(context instanceof ActivityInterface)
                     {
-                        ((ListActivityInterface)context).refreshList();
-                        ((ListActivityInterface)context).showSnackBar("Parental control disattivato", R.drawable.ic_lock_black_24dp, R.color.colorAccent, R.color.textDark);
+                        ((ActivityInterface)context).refreshList();
+                        ((ActivityInterface)context).showSnackBar("Parental control disattivato", R.drawable.ic_lock_black_24dp, R.color.colorAccent, R.color.textDark);
                     }
 
                     dismiss();

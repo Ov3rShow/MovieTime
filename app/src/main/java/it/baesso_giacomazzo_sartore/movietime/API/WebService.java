@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
-import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
+import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 import it.baesso_giacomazzo_sartore.movietime.objects.SearchResult;
 import retrofit2.Call;
@@ -48,8 +50,8 @@ public class WebService {
             @EverythingIsNonNull
             public void onResponse(Call<PopularResult> call, Response<PopularResult> response) {
 
-                if(context instanceof ListActivityInterface)
-                    ((ListActivityInterface)context).showApiCallResult(response.body());
+                if(context instanceof ActivityInterface)
+                    ((ActivityInterface)context).showApiCallResult(response.body().getResults());
 
                 if(response.body() != null && response.body().getResults() != null)
                 {
@@ -90,21 +92,30 @@ public class WebService {
         });
     }
 
-    public void searchMovie(final Context context, String localization, final int page, String query, String key){
+    public void searchMovie(final Context context, String localization, String query, String key){
         Map<String, String> parameters = new HashMap<>();
         parameters.put("api_key", key);
         parameters.put("language", localization);
-        parameters.put("page", String.valueOf(page));
-        parameters.put("query", String.valueOf(query));
+        parameters.put("query", query);
+        parameters.put("include_adult", String.valueOf(PrefsManager.getInstance(context).getPreference(context.getString(R.string.pref_parental_control_enabled), true)));
+
+        Log.w("SEARCH", "ENTRATO");
 
         todoService.searchMovie(parameters).enqueue(new Callback<SearchResult>() {
             @Override
+            @EverythingIsNonNull
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                if(context instanceof DetailActivityInterface && response.body() != null)
-                    ((DetailActivityInterface)context).showSimilarMovies(response.body().getResults());
+                Log.w("SEARCH", response.message());
+                if(context instanceof ActivityInterface && response.body() != null)
+                {
+                    ((ActivityInterface)context).showSearchResult(response.body().getResults());
+                    Log.w("SEARCH", "ENTRATO1");
+                }
+
             }
 
             @Override
+            @EverythingIsNonNull
             public void onFailure(Call<SearchResult> call, Throwable t) {
                 Log.e("Filtro ", t.getMessage());
             }

@@ -17,7 +17,7 @@ public interface MoviesService {
     @GET("/3/movie/{movie_id}/similar")
     Call<PopularResult> getSimilarMovies(@Path("movie_id") String movieId, @QueryMap Map<String, String> parameters);
 
-    @GET("/3/search/searchMovie")
+    @GET("/3/search/movie")
     Call<SearchResult> searchMovie(@QueryMap Map<String, String> parameters);
 
 }

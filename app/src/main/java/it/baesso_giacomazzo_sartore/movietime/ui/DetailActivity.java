@@ -28,9 +28,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import it.baesso_giacomazzo_sartore.movietime.API.DbSaver;
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
+import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
@@ -39,7 +41,7 @@ import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 
-public class DetailActivity extends AppCompatActivity implements DetailActivityInterface {
+public class DetailActivity extends AppCompatActivity implements DetailActivityInterface, ActivityInterface {
 
     ImageView imageView;
     TextView titleTxtView, overviewTxtView, dateTextView, noSimilar;
@@ -148,9 +150,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
             String data = currentMovie.getRelease_date();
             try {
-                Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(data);
-                data = new SimpleDateFormat("dd/MM/yyyy").format(date1);
-            } catch (ParseException e) {
+                Date date1=new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN).parse(data);
+                data = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN).format(date1);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             dateTextView.setText(data);
@@ -254,5 +256,25 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         snackbar.setTextColor(getColor(textIconColor));
 
         snackbar.show();
+    }
+
+    @Override
+    public void showApiCallResult(List<Movie> movies) {
+
+    }
+
+    @Override
+    public void showSnackBar(String text, int icon, int backgroundColor, int textIconColor) {
+        showCustomSnackbar(text, icon, backgroundColor, textIconColor);
+    }
+
+    @Override
+    public void refreshList() {
+
+    }
+
+    @Override
+    public void showSearchResult(List<Movie> movies) {
+
     }
 }

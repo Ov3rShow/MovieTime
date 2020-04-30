@@ -18,6 +18,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,15 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
-import it.baesso_giacomazzo_sartore.movietime.ListActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
 import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
-import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
 
-public class ListActivity extends AppCompatActivity implements ListActivityInterface, MaterialSearchBar.OnSearchActionListener {
+public class ListActivity extends AppCompatActivity implements ActivityInterface, MaterialSearchBar.OnSearchActionListener {
 
     RecyclerView recyclerView;
     RecyclerViewFilmsAdapter mAdapter;
@@ -143,7 +143,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                 if(isNetworkAvailable())
                 {
                     WebService webService = WebService.getInstance();
-                    webService.searchMovie(ListActivity.this, "it-IT", nextPageToDownload, searchBar.getText(), getString(R.string.api_key));
+                    webService.searchMovie(ListActivity.this, "it-IT", charSequence.toString(), getString(R.string.api_key));
                 }else{
                     Cursor movieCursor = getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings.TITLE + " LIKE '%" + charSequence + "%'", null, null);
 
@@ -248,13 +248,13 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     }
 
     @Override
-    public void showApiCallResult(PopularResult result) {
+    public void showApiCallResult(List<Movie> movies) {
         if (mAdapter != null && mAdapter.getMovies() != null)
         {
 
             if(activityStartedOffline)
             {
-                for(Movie m : result.getResults())
+                for(Movie m : movies)
                 {
                     if(!mAdapter.checkIfExists(m.getId()))
                         mAdapter.getMovies().add(m);
@@ -263,11 +263,11 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
                 activityStartedOffline = false;
             }
             else
-                mAdapter.getMovies().addAll(result.getResults());
+                mAdapter.getMovies().addAll(movies);
 
             mAdapter.notifyDataSetChanged();
         } else
-            showList(result.getResults());
+            showList(movies);
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -280,6 +280,12 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     @Override
     public void refreshList() {
         updateMoviesList(false);
+    }
+
+    @Override
+    public void showSearchResult(List<Movie> movies) {
+        Log.w("SEARCHRESULT", "ENTRATO");
+        showList(movies);
     }
 
     void showList(List<Movie> list) {
@@ -330,7 +336,7 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
 
     @Override
     public void onSearchStateChanged(boolean enabled) {
-
+        prepareOfflineList();
     }
 
     @Override
@@ -346,6 +352,9 @@ public class ListActivity extends AppCompatActivity implements ListActivityInter
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(mAdapter == null)
+            return;
 
         if(requestCode == WATCH_LATER_ACTIVITY_CODE || requestCode == DETAIL_ACTIVITY_CODE)
         {
