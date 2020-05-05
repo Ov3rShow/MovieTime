@@ -183,7 +183,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (!recyclerView.canScrollVertically(1)) {
-                    if(isNetworkAvailable())
+                    if(isNetworkAvailable() && !searchBar.isSearchOpened())
                     {
                         progressBar.setVisibility(View.VISIBLE);
                         refreshList();
@@ -214,6 +214,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         if (isNetworkAvailable()) {
             WebService webService = WebService.getInstance();
             webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload, clearDb);
+            //webService.getNowPlaying(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload, clearDb);
             nextPageToDownload++;
             PrefsManager.getInstance(ListActivity.this).setPreference(getString(R.string.pref_page_index), nextPageToDownload);
         } else {

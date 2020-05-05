@@ -69,6 +69,38 @@ public class WebService {
 
     }
 
+    public void getNowPlaying(final Context context, String key, String localization, final int page, final boolean clearDb){
+
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("api_key", key);
+        parameters.put("language", localization);
+        parameters.put("page", String.valueOf(page));
+        parameters.put("region", "IT");
+
+        todoService.listNowPlaying(parameters).enqueue(new Callback<PopularResult>() {
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call<PopularResult> call, Response<PopularResult> response) {
+
+                if(context instanceof ActivityInterface)
+                    ((ActivityInterface)context).showApiCallResult(response.body().getResults());
+
+                if(response.body() != null && response.body().getResults() != null)
+                {
+                    if((clearDb) || page > 1)
+                        DbSaver.DbSaving(context, response.body().getResults(), page, clearDb);
+                }
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call<PopularResult> call, Throwable t) {
+                Log.e("Filtro ", t.getMessage());
+            }
+        });
+
+    }
+
     public void getSimilarMovies(final Context context, String movieId, String key, String localization){
 
         Map<String, String> parameters = new HashMap<>();

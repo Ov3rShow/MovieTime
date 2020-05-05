@@ -20,4 +20,7 @@ public interface MoviesService {
     @GET("/3/search/movie")
     Call<SearchResult> searchMovie(@QueryMap Map<String, String> parameters);
 
+    @GET("/3/movie/now_playing")
+    Call<PopularResult> listNowPlaying(@QueryMap Map<String, String> parameters);
+
 }
