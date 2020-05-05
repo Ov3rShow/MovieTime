@@ -16,7 +16,9 @@ public class DbSaver {
 
     static void DbSaving(Context context, List<Movie> movies, int page, boolean clearDb){
 
-        if(clearDb)
+        Log.w("PULIZIA DB", String.valueOf(DbSaver.dbSaveTimeCheck(context)));
+
+        if(clearDb && DbSaver.dbSaveTimeCheck(context))
             context.getContentResolver().delete(DbProvider.MOVIES_URI, MovieDbStrings.WATCH_LATER + " = 0", null);
 
         for (Movie movie : movies)
@@ -44,7 +46,7 @@ public class DbSaver {
 
     static boolean dbSaveTimeCheck(Context context)
     {
-        long lastSaveTime = PrefsManager.getInstance(context).getPreference(context.getString(R.string.save_cache_db), 0);
+        long lastSaveTime = PrefsManager.getInstance(context).getPreference(context.getString(R.string.save_cache_db), Long.valueOf(0));
 
         //se il valore è 0 questa è la prima volta quindi devo salvare i film
         if(lastSaveTime == 0)

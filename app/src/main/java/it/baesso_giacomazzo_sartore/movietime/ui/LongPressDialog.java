@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,14 +123,10 @@ public class LongPressDialog extends DialogFragment {
         DbSaver.DbSavingSingle(context, movie, true);
 
         dismiss();
-
-        Log.w("LONGPRESS", "INSERT");
     }
 
     private void update(ContentValues contentValues)
     {
-        Log.w("LONGPRESS", "UPDATE");
-
         if(context.getContentResolver().update(DbProvider.MOVIES_URI, contentValues , MovieDbStrings._ID + " = " + movie.getId(), null) > 0)
         {
             watchLaterImg.setVisibility(isWatchLater? View.VISIBLE : View.INVISIBLE);

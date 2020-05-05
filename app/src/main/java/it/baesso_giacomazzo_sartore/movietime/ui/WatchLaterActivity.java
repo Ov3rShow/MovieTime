@@ -1,12 +1,16 @@
 package it.baesso_giacomazzo_sartore.movietime.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -35,6 +39,8 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
 
     int spanCount;
 
+    final int DETAIL_ACTIVITY_CODE = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +49,9 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
         if(getSupportActionBar() != null)
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setSubtitle("Da vedere");
+            //getSupportActionBar().setSubtitle("Da vedere");
+            getSupportActionBar().setTitle("Guarda più tardi");
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.colorPrimary)));
         }
 
         prepareSpanCount();
@@ -140,5 +148,19 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
         snackbar.setBackgroundTint(getColor(backgroundColor));
         snackbar.setTextColor(getColor(textIconColor));
         snackbar.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(mAdapter == null)
+            return;
+
+        if(requestCode == DETAIL_ACTIVITY_CODE)
+        {
+            //mAdapter.notifyDataSetChanged();
+            showMovies();
+        }
     }
 }

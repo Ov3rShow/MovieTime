@@ -55,7 +55,7 @@ public class WebService {
 
                 if(response.body() != null && response.body().getResults() != null)
                 {
-                    if((clearDb /*&& DbSaver.dbSaveTimeCheck(context)*/) || page > 1)
+                    if((clearDb) || page > 1)
                         DbSaver.DbSaving(context, response.body().getResults(), page, clearDb);
                 }
             }
