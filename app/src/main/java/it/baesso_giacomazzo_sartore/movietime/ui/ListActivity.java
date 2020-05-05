@@ -61,8 +61,6 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
     final int WATCH_LATER_ACTIVITY_CODE = 1;
     final int DETAIL_ACTIVITY_CODE = 2;
 
-    //enum per gestire se la lista è ordinata
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +110,6 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
                     {
                         mAdapter.sortList();
                         mAdapter.notifyDataSetChanged();
-
-                        //imposti lo stato di ordinamento
                         break;
                     }
                     case R.id.toolbar_watchLater:
@@ -301,7 +297,6 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
         mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this, R.layout.cell_layout);
         recyclerView.setAdapter(mAdapter);
-        //controlli se la lista è già stata ordinata e in caso la ordini
     }
 
     private boolean isNetworkAvailable() {

@@ -63,11 +63,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         setContentView(R.layout.activity_detail);
 
         if(getSupportActionBar() != null)
-        {
-            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setSubtitle("Dettagli film");
             getSupportActionBar().hide();
-        }
 
         imageView = findViewById(R.id.detail_img);
         titleTxtView = findViewById(R.id.detail_title);
@@ -149,10 +145,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
             ratingBar.setRating((float)currentMovie.getVote_average()/2);
 
             String data = currentMovie.getRelease_date();
-            try {
-                Date date1=new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN).parse(data);
-                data = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN).format(date1);
-            } catch (Exception e) {
+            try{
+                Date date1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN).parse(data);
+                data = new SimpleDateFormat("dd MMMM yyyy", Locale.ITALIAN).format(date1);
+            }catch (Exception e){
+                data = "Data di uscita sconosciuta";
                 e.printStackTrace();
             }
             dateTextView.setText(data);
@@ -220,7 +217,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
     }
 
     void getCurrentWatchLaterStatus() {
-
         Cursor cursor = DetailActivity.this.getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings._ID + " = " + currentMovie.getId(), null, null, null);
 
         if (cursor != null) {
@@ -254,7 +250,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         textView.setCompoundDrawablePadding(16);
         snackbar.setBackgroundTint(getColor(backgroundColor));
         snackbar.setTextColor(getColor(textIconColor));
-
         snackbar.show();
     }
 
