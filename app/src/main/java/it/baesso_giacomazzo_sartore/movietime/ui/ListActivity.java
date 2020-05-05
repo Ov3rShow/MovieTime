@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
@@ -81,6 +80,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
         searchBar.inflateMenu(R.menu.movie_menu);
 
+        //controllo per vedere se la connessione ad internet è presente
         if(!isNetworkAvailable())
         {
             showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent, R.color.textDark);
@@ -88,6 +88,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
             nextPageToDownload = PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_page_index), 1);
         }
 
+        //diamo il click sulle opzioni del menu
         searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -123,14 +124,16 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         });
 
         searchBar.setCardViewElevation(10);
+
+        //gestione della barra di ricerca
         searchBar.addTextChangeListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
+            //metodo che utilizza la parola scritta nella barra per trovare uno/più film
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //se entra in textchanged senza che nessun carattere sia cambiato esco dal metodo
                 if(charSequence.toString().equals("") && i2 == 0 && i1 == 0)
                     return;
 
@@ -173,6 +176,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
         });
 
+        //gestione dello scroll
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -195,6 +199,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
             }
         });
 
+        //utilizzo di un chip per tornare all'inizio della lista dei film
         goToTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,6 +211,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         updateMoviesList(true);
     }
 
+    //metodo utilizzato per l'aggiornamento della lista dei film; lista per popolarità
     void updateMoviesList(boolean clearDb) {
         if (isNetworkAvailable()) {
             WebService webService = WebService.getInstance();
@@ -217,6 +223,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         }
     }
 
+    //gestione della lista dei film se si è offline
     void prepareOfflineList() {
         cachedMovies = new ArrayList<>();
         Cursor movies = ListActivity.this.getContentResolver().query(DbProvider.MOVIES_URI, null, null, null, null);
@@ -280,10 +287,10 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
     @Override
     public void showSearchResult(List<Movie> movies) {
-        Log.w("SEARCHRESULT", "ENTRATO");
         showList(movies);
     }
 
+    //metodo per la visualizzazione della lista dei film
     void showList(List<Movie> list) {
         List<Movie> filteredList = new ArrayList<>();
 
@@ -299,6 +306,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         recyclerView.setAdapter(mAdapter);
     }
 
+    //metodo per il controllo dell'accessibilità ad internet
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null)
@@ -307,6 +315,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         return activeNetworkInfo != null;
     }
 
+    //metodo per la visualizzazione/creazione della snackbar
     void showCustomSnackbar(String text, int icon, int backgroundColor, int textIconColor) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG);
         View snackbarLayout = snackbar.getView();
@@ -321,6 +330,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         snackbar.show();
     }
 
+    //metodo per la gestione dello spazio delle card, gestito sia per verticale che orizzontale
     void prepareSpanCount() {
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
@@ -336,7 +346,6 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
     @Override
     public void onSearchConfirmed(CharSequence text) {
-        Toast.makeText(ListActivity.this, "Search: " + text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
