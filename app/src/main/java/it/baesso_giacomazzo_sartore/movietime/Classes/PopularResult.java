@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.objects;
+package it.baesso_giacomazzo_sartore.movietime.Classes;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +18,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,12 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
-import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
-import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
+import it.baesso_giacomazzo_sartore.movietime.Interfaces.ActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.Dialog.ParentalControlDialog;
+import it.baesso_giacomazzo_sartore.movietime.Dialog.RemoveParentalControlDialog;
+import it.baesso_giacomazzo_sartore.movietime.Utilities.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
+import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Adapter.RecyclerViewFilmsAdapter;
 
 public class ListActivity extends AppCompatActivity implements ActivityInterface, MaterialSearchBar.OnSearchActionListener {
 

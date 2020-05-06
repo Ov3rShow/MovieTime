@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.API;
+package it.baesso_giacomazzo_sartore.movietime.Utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,15 +6,14 @@ import android.util.Log;
 
 import java.util.List;
 
-import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
+import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
 
 public class DbSaver {
 
-    static void DbSaving(Context context, List<Movie> movies, int page, boolean clearDb){
+    public static void DbSaving(Context context, List<Movie> movies, int page, boolean clearDb){
 
         Log.w("PULIZIA DB", String.valueOf(DbSaver.dbSaveTimeCheck(context)));
 

@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Dialog;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,12 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import it.baesso_giacomazzo_sartore.movietime.API.DbSaver;
-import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.Utilities.DbSaver;
+import it.baesso_giacomazzo_sartore.movietime.Interfaces.ActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
+import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Activity.WatchLaterActivity;
 
 public class LongPressDialog extends DialogFragment {
 
@@ -34,7 +35,7 @@ public class LongPressDialog extends DialogFragment {
 
     private Movie movie;
 
-    LongPressDialog(Movie movie, ImageView watchLaterImg, boolean isSavedOnDb)
+    public LongPressDialog(Movie movie, ImageView watchLaterImg, boolean isSavedOnDb)
     {
         this.movie = movie;
         this.isSavedOnDb = isSavedOnDb;

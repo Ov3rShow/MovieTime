@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;

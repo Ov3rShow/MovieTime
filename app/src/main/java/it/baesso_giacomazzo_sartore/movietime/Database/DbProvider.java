@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.database;
+package it.baesso_giacomazzo_sartore.movietime.Database;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 public class DbProvider extends ContentProvider {
 
 
-    public static final String AUTORITY = "it.baesso_giacomazzo_sartore.movietime.database.DbProvider";
+    public static final String AUTORITY = "it.baesso_giacomazzo_sartore.movietime.Database.DbProvider";
     public static final String BASE_PATH_MOVIES = "movies";
     public static final int ALL_MOVIE = 1;
     public static final int SINGLE_MOVIE = 0;

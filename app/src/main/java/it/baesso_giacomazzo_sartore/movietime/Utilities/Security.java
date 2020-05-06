@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime;
+package it.baesso_giacomazzo_sartore.movietime.Utilities;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

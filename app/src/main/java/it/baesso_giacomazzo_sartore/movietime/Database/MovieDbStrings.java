@@ -1,6 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.database;
-
-import android.provider.BaseColumns;
+package it.baesso_giacomazzo_sartore.movietime.Database;
 
 import com.google.gson.annotations.SerializedName;
 

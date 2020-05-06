@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,10 +23,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import it.baesso_giacomazzo_sartore.movietime.Activity.DetailActivity;
+import it.baesso_giacomazzo_sartore.movietime.Dialog.LongPressDialog;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
+import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
 
 public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewFilmsAdapter.MyViewHolder> {
 
@@ -35,17 +37,17 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
     private int layout;
     private boolean isSavedOnDb = false;
 
-    RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout) {
+    public RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout) {
         this.movies = movies;
         this.context = context;
         this.layout = layout;
     }
 
-    List<Movie> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 
-    boolean checkIfExists(String id) {
+    public boolean checkIfExists(String id) {
         for (Movie m : movies) {
             if (m.getId().equals(id))
                 return true;
@@ -140,7 +142,7 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         }
     }
 
-    void sortList() {
+    public void sortList() {
         Collections.sort(movies, new Comparator<Movie>() {
             @Override
             public int compare(Movie movie1, Movie movie2) {

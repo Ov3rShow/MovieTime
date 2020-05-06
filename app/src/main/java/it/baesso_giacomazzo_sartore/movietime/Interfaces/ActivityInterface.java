@@ -1,8 +1,8 @@
-package it.baesso_giacomazzo_sartore.movietime;
+package it.baesso_giacomazzo_sartore.movietime.Interfaces;
 
 import java.util.List;
 
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
 
 public interface ActivityInterface {
     void showApiCallResult(List<Movie> movies);
