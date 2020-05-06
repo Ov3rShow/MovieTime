@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -49,7 +48,6 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
         if(getSupportActionBar() != null)
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setSubtitle("Da vedere");
             getSupportActionBar().setTitle("Guarda più tardi");
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.colorPrimary)));
         }
@@ -94,7 +92,6 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
 
             mAdapter = new RecyclerViewFilmsAdapter(moviesList, WatchLaterActivity.this, R.layout.cell_layout);
             recyclerView.setAdapter(mAdapter);
-            //controlli se la lista è già stata ordinata e in caso la ordini
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -159,7 +156,6 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
 
         if(requestCode == DETAIL_ACTIVITY_CODE)
         {
-            //mAdapter.notifyDataSetChanged();
             showMovies();
         }
     }

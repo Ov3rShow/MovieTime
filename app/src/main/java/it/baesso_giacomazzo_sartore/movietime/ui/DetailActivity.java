@@ -63,11 +63,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         setContentView(R.layout.activity_detail);
 
         if(getSupportActionBar() != null)
-        {
-            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setSubtitle("Dettagli film");
             getSupportActionBar().hide();
-        }
 
         imageView = findViewById(R.id.detail_img);
         titleTxtView = findViewById(R.id.detail_title);
@@ -80,6 +76,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         backBtn = findViewById(R.id.detail_back);
         watchLaterBtn = findViewById(R.id.detail_watchLater);
 
+        //click del bottone <- per chiudere l'attività e tornare alla precedente
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +84,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
             }
         });
 
+        //click su bottone per mettere il film nella lista "da vedere"
         watchLaterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,11 +146,13 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
             titleTxtView.setText(currentMovie.getTitle());
             ratingBar.setRating((float)currentMovie.getVote_average()/2);
 
+            //serve per capire la data di uscita del film, nel caso non si sapesse gestiamo l'eccezzione
             String data = currentMovie.getRelease_date();
-            try {
-                Date date1=new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN).parse(data);
-                data = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN).format(date1);
-            } catch (Exception e) {
+            try{
+                Date date1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN).parse(data);
+                data = new SimpleDateFormat("dd MMMM yyyy", Locale.ITALIAN).format(date1);
+            }catch (Exception e){
+                data = "Data di uscita sconosciuta";
                 e.printStackTrace();
             }
             dateTextView.setText(data);
@@ -161,6 +161,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         }
     }
 
+    //metodo per dare la possibilità di tornare ad un film o attività precedente
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -171,6 +172,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         return super.onOptionsItemSelected(item);
     }
 
+    //metodo che mostra, una volta cliccato un film, i film simili a quello scelto
     @Override
     public void showSimilarMovies(List<Movie> movies) {
         if(movies.size() == 0){
@@ -191,6 +193,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         scrollView.scrollTo(0, 0);
     }
 
+    //metodo per mettere un film nella categoria "da vedere"
     void setWatchLater()
     {
         watchLater = !watchLater;
@@ -219,8 +222,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
     }
 
+    //metodo per avere i vedere i film in "da vedere" al momento
     void getCurrentWatchLaterStatus() {
-
         Cursor cursor = DetailActivity.this.getContentResolver().query(DbProvider.MOVIES_URI, null, MovieDbStrings._ID + " = " + currentMovie.getId(), null, null, null);
 
         if (cursor != null) {
@@ -244,6 +247,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
             watchLaterBtn.setImageDrawable(getDrawable(R.drawable.custom_watch_later_yes));
     }
 
+    //metodo che crea la snackbar
     void showCustomSnackbar(String text, int icon, int backgroundColor, int textIconColor) {
         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG);
         View snackbarLayout = snackbar.getView();
@@ -254,7 +258,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
         textView.setCompoundDrawablePadding(16);
         snackbar.setBackgroundTint(getColor(backgroundColor));
         snackbar.setTextColor(getColor(textIconColor));
-
         snackbar.show();
     }
 
@@ -263,6 +266,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
 
     }
 
+    //metodo per visualizzare la Snackbar
     @Override
     public void showSnackBar(String text, int icon, int backgroundColor, int textIconColor) {
         showCustomSnackbar(text, icon, backgroundColor, textIconColor);
