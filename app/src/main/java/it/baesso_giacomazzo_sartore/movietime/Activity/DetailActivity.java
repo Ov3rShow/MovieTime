@@ -178,7 +178,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
             noSimilar.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }else{
-            mAdapter = new RecyclerViewFilmsAdapter(movies, DetailActivity.this, R.layout.cell_layout_small);
+            mAdapter = new RecyclerViewFilmsAdapter(movies, DetailActivity.this, R.layout.cell_layout_small, false);
             recyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
@@ -188,8 +188,12 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
     @Override
     protected void onResume() {
         super.onResume();
+
         ScrollView scrollView = findViewById(R.id.detail_scrollView);
         scrollView.scrollTo(0, 0);
+
+        if(mAdapter != null)
+            mAdapter.notifyDataSetChanged();
     }
 
     //metodo per mettere un film nella categoria "da vedere"
@@ -280,4 +284,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
     public void showSearchResult(List<Movie> movies) {
 
     }
+
+
 }

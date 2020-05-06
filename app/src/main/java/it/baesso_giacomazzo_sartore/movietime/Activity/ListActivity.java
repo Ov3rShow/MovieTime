@@ -41,11 +41,12 @@ import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
 import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
 import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
 import it.baesso_giacomazzo_sartore.movietime.Adapter.RecyclerViewFilmsAdapter;
+import it.baesso_giacomazzo_sartore.movietime.Utilities.AdapterHolder;
 
 public class ListActivity extends AppCompatActivity implements ActivityInterface, MaterialSearchBar.OnSearchActionListener {
 
     RecyclerView recyclerView;
-    RecyclerViewFilmsAdapter mAdapter;
+    //RecyclerViewFilmsAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     List<Movie> cachedMovies;
@@ -62,11 +63,19 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
     final int WATCH_LATER_ACTIVITY_CODE = 1;
     final int DETAIL_ACTIVITY_CODE = 2;
 
+    boolean isRotated = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_list);
+
+        if(savedInstanceState != null)
+        {
+            nextPageToDownload = savedInstanceState.getInt("nextPage");
+            isRotated = savedInstanceState.getBoolean("rotate");
+        }
 
         prepareSpanCount();
 
@@ -85,7 +94,9 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         //controllo per vedere se la connessione ad internet è presente
         if(!isNetworkAvailable())
         {
-            showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent, R.color.textDark);
+            if(!isRotated)
+                showCustomSnackbar("Connessione a internet assente", R.drawable.ic_warning_black_24dp, R.color.colorAccent, R.color.textDark);
+
             activityStartedOffline = true;
             nextPageToDownload = PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_page_index), 1);
         }
@@ -111,8 +122,8 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
                     }
                     case R.id.toolbar_sortByName:
                     {
-                        mAdapter.sortList();
-                        mAdapter.notifyDataSetChanged();
+                        AdapterHolder.getInstance().getmAdapter().sortList();
+                        AdapterHolder.getInstance().getmAdapter().notifyDataSetChanged();
                         break;
                     }
                     case R.id.toolbar_watchLater:
@@ -166,7 +177,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
                     movieCursor.close();
 
-                    showList(movieSearched);
+                    showList(movieSearched, false);
 
                 }
 
@@ -215,6 +226,16 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
     //metodo utilizzato per l'aggiornamento della lista dei film; lista per popolarità
     void updateMoviesList(boolean clearDb) {
+
+        if(isRotated)
+        {
+            AdapterHolder.getInstance().getmAdapter().setContext(ListActivity.this);
+            recyclerView.setAdapter(AdapterHolder.getInstance().getmAdapter());
+            isRotated = false;
+            progressBar.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         if (isNetworkAvailable()) {
             WebService webService = WebService.getInstance();
             webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload, clearDb);
@@ -247,7 +268,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
             movies.close();
 
-            showList(cachedMovies);
+            showList(cachedMovies, true);
         }
 
         progressBar.setVisibility(View.INVISIBLE);
@@ -255,25 +276,25 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
     @Override
     public void showApiCallResult(List<Movie> movies) {
-        if (mAdapter != null && mAdapter.getMovies() != null)
+        if (AdapterHolder.getInstance().getmAdapter() != null && AdapterHolder.getInstance().getmAdapter().getMovies() != null)
         {
 
             if(activityStartedOffline)
             {
                 for(Movie m : movies)
                 {
-                    if(!mAdapter.checkIfExists(m.getId()))
-                        mAdapter.getMovies().add(m);
+                    if(!AdapterHolder.getInstance().getmAdapter().checkIfExists(m.getId()))
+                        AdapterHolder.getInstance().getmAdapter().getMovies().add(m);
                 }
 
                 activityStartedOffline = false;
             }
             else
-                mAdapter.getMovies().addAll(movies);
+                AdapterHolder.getInstance().getmAdapter().getMovies().addAll(movies);
 
-            mAdapter.notifyDataSetChanged();
+            AdapterHolder.getInstance().getmAdapter().notifyDataSetChanged();
         } else
-            showList(movies);
+            showList(movies, true);
 
         progressBar.setVisibility(View.INVISIBLE);
     }
@@ -290,11 +311,11 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
     @Override
     public void showSearchResult(List<Movie> movies) {
-        showList(movies);
+        showList(movies, false);
     }
 
     //metodo per la visualizzazione della lista dei film
-    void showList(List<Movie> list) {
+    void showList(List<Movie> list, boolean longPressEnabled) {
         List<Movie> filteredList = new ArrayList<>();
 
         if (PrefsManager.getInstance(ListActivity.this).getPreference(getString(R.string.pref_parental_control_enabled), false)) {
@@ -305,8 +326,8 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         } else
             filteredList.addAll(list);
 
-        mAdapter = new RecyclerViewFilmsAdapter(filteredList, ListActivity.this, R.layout.cell_layout);
-        recyclerView.setAdapter(mAdapter);
+        AdapterHolder.getInstance().setmAdapter(new RecyclerViewFilmsAdapter(filteredList, ListActivity.this, R.layout.cell_layout, longPressEnabled));
+        recyclerView.setAdapter(AdapterHolder.getInstance().getmAdapter());
     }
 
     //metodo per il controllo dell'accessibilità ad internet
@@ -360,13 +381,19 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(mAdapter == null)
+        if(AdapterHolder.getInstance().getmAdapter() == null)
             return;
 
         if(requestCode == WATCH_LATER_ACTIVITY_CODE || requestCode == DETAIL_ACTIVITY_CODE)
         {
-            mAdapter.notifyDataSetChanged();
+            AdapterHolder.getInstance().getmAdapter().notifyDataSetChanged();
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("rotate", true);
+        outState.putInt("nextPage", nextPageToDownload);
+        super.onSaveInstanceState(outState);
+    }
 }

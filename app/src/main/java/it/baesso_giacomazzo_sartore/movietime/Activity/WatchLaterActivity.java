@@ -91,7 +91,7 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
             }
             movies.close();
 
-            mAdapter = new RecyclerViewFilmsAdapter(moviesList, WatchLaterActivity.this, R.layout.cell_layout);
+            mAdapter = new RecyclerViewFilmsAdapter(moviesList, WatchLaterActivity.this, R.layout.cell_layout, true);
             recyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }else{

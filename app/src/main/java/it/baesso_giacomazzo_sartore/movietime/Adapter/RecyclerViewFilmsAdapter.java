@@ -36,11 +36,13 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
     private Context context;
     private int layout;
     private boolean isSavedOnDb = false;
+    private boolean longPressEnabled;
 
-    public RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout) {
+    public RecyclerViewFilmsAdapter(List<Movie> movies, Context context, int layout, boolean longPressEnabled) {
         this.movies = movies;
         this.context = context;
         this.layout = layout;
+        this.longPressEnabled = longPressEnabled;
     }
 
     public List<Movie> getMovies() {
@@ -62,6 +64,10 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
         View cellView = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
 
         return new MyViewHolder(cellView);
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -118,14 +124,17 @@ public class RecyclerViewFilmsAdapter extends RecyclerView.Adapter<RecyclerViewF
             }
         });
 
-        cardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                LongPressDialog dialog = new LongPressDialog(movies.get(position), watchLaterImg, isSavedOnDb);
-                dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "TAG_PREFERITI");
-                return false;
-            }
-        });
+        if(longPressEnabled)
+        {
+            cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    LongPressDialog dialog = new LongPressDialog(movies.get(position), watchLaterImg, isSavedOnDb);
+                    dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "TAG_PREFERITI");
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
