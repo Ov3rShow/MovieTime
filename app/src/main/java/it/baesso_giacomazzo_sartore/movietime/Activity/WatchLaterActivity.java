@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +22,12 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.Interfaces.ActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
+import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Adapter.RecyclerViewFilmsAdapter;
 
 public class WatchLaterActivity extends AppCompatActivity implements ActivityInterface {
 
@@ -93,6 +94,8 @@ public class WatchLaterActivity extends AppCompatActivity implements ActivityInt
             mAdapter = new RecyclerViewFilmsAdapter(moviesList, WatchLaterActivity.this, R.layout.cell_layout);
             recyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
+        }else{
+            emptyListAlert.setVisibility(View.VISIBLE);
         }
     }
 

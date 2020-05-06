@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Activity;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -24,20 +23,20 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.willy.ratingbar.ScaleRatingBar;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import it.baesso_giacomazzo_sartore.movietime.API.DbSaver;
+import it.baesso_giacomazzo_sartore.movietime.Utilities.DbSaver;
 import it.baesso_giacomazzo_sartore.movietime.API.WebService;
-import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
-import it.baesso_giacomazzo_sartore.movietime.DetailActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.Interfaces.ActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.Interfaces.DetailActivityInterface;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.database.DbProvider;
-import it.baesso_giacomazzo_sartore.movietime.database.MovieDbStrings;
-import it.baesso_giacomazzo_sartore.movietime.objects.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Database.DbProvider;
+import it.baesso_giacomazzo_sartore.movietime.Database.MovieDbStrings;
+import it.baesso_giacomazzo_sartore.movietime.Classes.Movie;
+import it.baesso_giacomazzo_sartore.movietime.Adapter.RecyclerViewFilmsAdapter;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 

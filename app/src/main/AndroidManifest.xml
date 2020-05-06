@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme1">
-        <activity android:name=".ui.SplashActivity" android:theme="@style/SplashTheme">
+        <activity android:name=".Activity.SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,23 +20,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.WatchLaterActivity"
+            android:name=".Activity.WatchLaterActivity"
             android:theme="@style/AppTheme2" />
         <activity
-            android:name=".ui.DetailActivity"
-            android:parentActivityName=".ui.ListActivity">
+            android:name=".Activity.DetailActivity"
+            android:parentActivityName=".Activity.ListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.ListActivity" />
+                android:value=".Activity.ListActivity" />
         </activity>
         <activity
-            android:name=".ui.ListActivity"
+            android:name=".Activity.ListActivity"
             android:theme="@style/AppTheme">
         </activity>
 
         <provider
-            android:name=".database.DbProvider"
-            android:authorities="it.baesso_giacomazzo_sartore.movietime.database.DbProvider" />
+            android:name=".Database.DbProvider"
+            android:authorities="it.baesso_giacomazzo_sartore.movietime.Database.DbProvider" />
     </application>
 
 </manifest>

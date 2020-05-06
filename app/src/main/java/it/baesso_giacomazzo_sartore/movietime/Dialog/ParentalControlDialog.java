@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.ui;
+package it.baesso_giacomazzo_sartore.movietime.Dialog;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import it.baesso_giacomazzo_sartore.movietime.ActivityInterface;
-import it.baesso_giacomazzo_sartore.movietime.PrefsManager;
+import it.baesso_giacomazzo_sartore.movietime.Interfaces.ActivityInterface;
+import it.baesso_giacomazzo_sartore.movietime.Utilities.PrefsManager;
 import it.baesso_giacomazzo_sartore.movietime.R;
-import it.baesso_giacomazzo_sartore.movietime.Security;
+import it.baesso_giacomazzo_sartore.movietime.Utilities.Security;
 
 public class ParentalControlDialog extends DialogFragment {
 

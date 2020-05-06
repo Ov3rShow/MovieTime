@@ -1,4 +1,4 @@
-package it.baesso_giacomazzo_sartore.movietime.database;
+package it.baesso_giacomazzo_sartore.movietime.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

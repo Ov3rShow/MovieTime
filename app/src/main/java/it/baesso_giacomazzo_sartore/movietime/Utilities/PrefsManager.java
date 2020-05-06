@@ -1,7 +1,9 @@
-package it.baesso_giacomazzo_sartore.movietime;
+package it.baesso_giacomazzo_sartore.movietime.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import it.baesso_giacomazzo_sartore.movietime.R;
 
 public class PrefsManager {
     private static PrefsManager prefsManager;

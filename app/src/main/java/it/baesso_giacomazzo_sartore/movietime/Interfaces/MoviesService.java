@@ -1,9 +1,9 @@
-package it.baesso_giacomazzo_sartore.movietime.API;
+package it.baesso_giacomazzo_sartore.movietime.Interfaces;
 
 import java.util.Map;
 
-import it.baesso_giacomazzo_sartore.movietime.objects.PopularResult;
-import it.baesso_giacomazzo_sartore.movietime.objects.SearchResult;
+import it.baesso_giacomazzo_sartore.movietime.Classes.PopularResult;
+import it.baesso_giacomazzo_sartore.movietime.Classes.SearchResult;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
