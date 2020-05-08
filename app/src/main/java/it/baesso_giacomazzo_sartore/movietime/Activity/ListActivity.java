@@ -46,7 +46,6 @@ import it.baesso_giacomazzo_sartore.movietime.Utilities.AdapterHolder;
 public class ListActivity extends AppCompatActivity implements ActivityInterface, MaterialSearchBar.OnSearchActionListener {
 
     RecyclerView recyclerView;
-    //RecyclerViewFilmsAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     List<Movie> cachedMovies;
@@ -161,7 +160,7 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
 
                     if(movieCursor == null)
                         return;
-
+                    //carichiamo la lista dei film finchè non ne ce ne sono èiù
                     while(movieCursor.moveToNext()){
 
                         Movie movie = new Movie();
@@ -239,7 +238,6 @@ public class ListActivity extends AppCompatActivity implements ActivityInterface
         if (isNetworkAvailable()) {
             WebService webService = WebService.getInstance();
             webService.getAllPopular(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload, clearDb);
-            //webService.getNowPlaying(ListActivity.this, getString(R.string.api_key), "it-IT", nextPageToDownload, clearDb);
             nextPageToDownload++;
             PrefsManager.getInstance(ListActivity.this).setPreference(getString(R.string.pref_page_index), nextPageToDownload);
         } else {

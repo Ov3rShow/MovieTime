@@ -31,6 +31,8 @@ import it.baesso_giacomazzo_sartore.movietime.Adapter.RecyclerViewFilmsAdapter;
 
 public class WatchLaterActivity extends AppCompatActivity implements ActivityInterface {
 
+    //activity del watch later, lista di film che mettiamo "da vedere"
+
     RecyclerView recyclerView;
     RecyclerViewFilmsAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;

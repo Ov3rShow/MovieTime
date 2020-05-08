@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 public class SplashActivity extends AppCompatActivity {
 
+    //splash art dell'applicazione
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

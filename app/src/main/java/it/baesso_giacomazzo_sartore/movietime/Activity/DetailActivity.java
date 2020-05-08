@@ -123,6 +123,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityI
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
             else
+                //caricamento delle immagini tramite glide del database
                 Glide.with(DetailActivity.this)
                         .load("https://image.tmdb.org/t/p/w500".concat(image))
                         .apply(new RequestOptions().centerCrop())
